@@ -1,5 +1,5 @@
 {
-  "name": "nightcode",
+  "name": "easycode",
   "version": "1.0.0",
   "workspaces": ["packages/*"],
   "scripts": {

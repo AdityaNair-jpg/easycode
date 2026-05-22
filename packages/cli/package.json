@@ -1,5 +1,5 @@
 {
-  "name": "@nightcode/cli",
+  "name": "@easycode/cli",
   "module": "src/index.tsx",
   "type": "module",
   "private": true,

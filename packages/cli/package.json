@@ -1,0 +1,19 @@
+{
+  "name": "@easycode/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bun src/index.tsx",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@opentui/core": "latest",
+    "@opentui/react": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19.2.15",
+    "tsx": "^4",
+    "typescript": "^5"
+  }
+}

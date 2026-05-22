@@ -1,19 +1,21 @@
 {
   "name": "@easycode/cli",
-  "version": "0.1.0",
+  "module": "src/index.tsx",
   "type": "module",
+  "private": true,
   "scripts": {
-    "dev": "bun src/index.tsx",
-    "build": "tsc"
-  },
-  "dependencies": {
-    "@opentui/core": "latest",
-    "@opentui/react": "latest"
+    "dev": "bun run --watch src/index.tsx"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^19.2.15",
-    "tsx": "^4",
+    "@types/bun": "latest",
+    "@types/react": "^19.2.14"
+  },
+  "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "@opentui/core": "^0.1.97",
+    "@opentui/react": "^0.1.97",
+    "react": "^19.2.4"
   }
 }

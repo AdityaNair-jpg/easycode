@@ -40,8 +40,10 @@
     "packages/server": {
       "name": "@easycode/server",
       "dependencies": {
+        "@easycode/database": "workspace:*",
         "@easycode/shared": "workspace:*",
         "@hono/zod-validator": "^0.8.0",
+        "dotenv": "^17.4.2",
         "hono": "^4.12.22",
         "zod": "^4.4.3",
       },

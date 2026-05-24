@@ -9,11 +9,14 @@
     "dev": "bun run --hot src/index.ts"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.79",
+    "@ai-sdk/openai": "^3.0.65",
     "@easycode/database": "workspace:*",
     "@easycode/shared": "workspace:*",
     "@hono/zod-validator": "^0.8.0",
     "@sentry/bun": "^10.53.1",
     "@sentry/hono": "^10.53.1",
+    "ai": "^6.0.191",
     "dotenv": "^17.4.2",
     "hono": "^4.12.22",
     "zod": "^4.4.3"

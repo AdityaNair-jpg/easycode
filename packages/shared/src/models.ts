@@ -3,7 +3,7 @@ export type ModelPricing = {
   outputUsdPerMillionTokens: number;
 };
 
-export type SupportedProvider = "anthropic" | "openai";
+export type SupportedProvider = "anthropic" | "openai" | "google";
 
 type SupportedChatModelDefinition = {
   id: string;
@@ -58,6 +58,14 @@ export const SUPPORTED_CHAT_MODELS = [
     pricing: {
       inputUsdPerMillionTokens: 0.2,
       outputUsdPerMillionTokens: 1.25,
+    },
+  },
+  {
+    id: "gemini-2.5-flash",
+    provider: "google",
+    pricing: {
+      inputUsdPerMillionTokens: 0.3,
+      outputUsdPerMillionTokens: 2.5,
     },
   },
 ] as const satisfies readonly SupportedChatModelDefinition[];

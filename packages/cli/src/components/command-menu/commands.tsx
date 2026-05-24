@@ -1,4 +1,4 @@
-import { SUPPORTED_CHAT_MODELS } from "@nightcode/shared";
+import { SUPPORTED_CHAT_MODELS } from "@easycode/shared";
 import { 
   AgentsDialogContent,
   ModelsDialogContent,

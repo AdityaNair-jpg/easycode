@@ -8,7 +8,7 @@ import type { Mode } from "@easycode/database/enums";
 import { 
   chatStreamEventSchema, 
   type SupportedChatModelId
-} from "@nightcode/shared";
+} from "@easycode/shared";
 
 export type ClientMessagePart = { type: "text"; text: string };
 

@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useCallback } from "react";
 import type { ReactNode } from "react";
-import { DEFAULT_CHAT_MODEL_ID, type SupportedChatModelId } from "@nightcode/shared";
+import { DEFAULT_CHAT_MODEL_ID, type SupportedChatModelId } from "@easycode/shared";
 import { Mode } from "@easycode/database/enums";
 
 type PromptConfigContextValue = {

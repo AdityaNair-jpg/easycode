@@ -19,6 +19,7 @@
     "@easycode/shared": "workspace:*",
     "@opentui/core": "^0.1.97",
     "@opentui/react": "^0.1.97",
+    "date-fns": "^4.3.0",
     "eventsource-parser": "^3.0.8",
     "hono": "^4.12.22",
     "opentui-spinner": "^0.0.6",

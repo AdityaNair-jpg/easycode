@@ -3,7 +3,7 @@ import { useParams, useLocation, useNavigate } from "react-router";
 import { z } from "zod";
 import { useKeyboard } from "@opentui/react";
 import prettyMs from "pretty-ms";
-import { messagePartsSchema, type SupportedChatModelId } from "@nightcode/shared";
+import { messagePartsSchema, type SupportedChatModelId } from "@easycode/shared";
 import type { InferResponseType } from "hono/client";
 import { SessionShell } from "../components/session-shell";
 import { 

@@ -1,4 +1,4 @@
-import type { Mode } from "@nightcode/database/enums";
+import type { Mode } from "@easycode/database/enums";
 import { createReadFileTool } from "./read-file";
 import { createListDirectoryTool } from "./list-directory";
 import { createWriteFileTool } from "./write-file";

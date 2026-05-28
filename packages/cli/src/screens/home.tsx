@@ -2,16 +2,18 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router";
 import { Header } from "../components/header";
 import { InputBar } from "../components/input-bar";
+import { usePromptConfig } from "../providers/prompt-config";
 import { TextAttributes } from "@opentui/core";
 
 export function Home() {
   const navigate = useNavigate();
+  const { mode, model } = usePromptConfig();
 
   const handleSubmit = useCallback(
     (text: string) => {
-      navigate("/sessions/new", { state: { message: text} });
+      navigate("/sessions/new", { state: { message: text, mode, model } });
     },
-    [navigate],
+    [navigate, mode, model],
   );
 
   return (

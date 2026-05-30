@@ -1,8 +1,9 @@
 import { Hono } from "hono";
-// import { HTTPException } from "hono/http-exception";
+import { HTTPException } from "hono/http-exception";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import * as Sentry from "@sentry/hono/bun";
+import { getAuth } from "@hono/clerk-auth";
 import { db } from "@easycode/database/client";
 import { Role, Mode, MessageStatus } from "@easycode/database/enums";
 import { findSupportedChatModel } from "@easycode/shared";
@@ -35,7 +36,13 @@ const createSessionValidator = zValidator(
 
 const app = new Hono()
   .get("/", async (c) => {
+    const auth = getAuth(c);
+    if (!auth?.userId) {
+      throw new HTTPException(401, { message: "Unauthorized" });
+    }
+
     const sessions = await db.session.findMany({
+      where: { userId: auth.userId },
       orderBy: { createdAt: "desc" },
       select: {
         id: true,
@@ -51,19 +58,15 @@ const app = new Hono()
     return c.json(sessions);
   })
   .get("/:id", async (c) => {
-    // MOCK: Uncomment to simulate slow session loading
-    // await new Promise((r) => setTimeout(r, 5000))
-
-    // MOCK: Uncomment to simulate session loading error
-    // throw new HTTPException(
-    //   500, 
-    //   { message: "Mock error: session loading failed" }
-    // )
+    const auth = getAuth(c);
+    if (!auth?.userId) {
+      throw new HTTPException(401, { message: "Unauthorized" });
+    }
 
     const id = c.req.param("id");
     
     const session = await db.session.findUnique({
-      where: { id },
+      where: { id, userId: auth.userId },
       include: {
         messages: { orderBy: { createdAt: "asc" } },
       },
@@ -72,7 +75,7 @@ const app = new Hono()
     if (!session) {
         Sentry.logger.warn("Session not found", {
             sessionId: id,
-            userId: "mock-user",
+            userId: auth.userId,
         })
       return c.json({ error: "Session not found" }, 404);
     }
@@ -80,21 +83,17 @@ const app = new Hono()
     return c.json(session);
   })
   .post("/", createSessionValidator, async (c) => {
-    // MOCK: Uncomment to simulate slow session loading
-    // await new Promise((r) => setTimeout(r, 5000))
-
-    // MOCK: Uncomment to simulate session loading error
-    // throw new HTTPException(
-    //   500, 
-    //   { message: "Mock error: session loading failed" }
-    // )
+    const auth = getAuth(c);
+    if (!auth?.userId) {
+      throw new HTTPException(401, { message: "Unauthorized" });
+    }
 
     const { initialMessage, ...data } = c.req.valid("json");
 
     const session = await db.session.create({
       data: {
         ...data,
-        userId: "mock-user",
+        userId: auth.userId,
         ...(initialMessage && {
           messages: {
             create: {

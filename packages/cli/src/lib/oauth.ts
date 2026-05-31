@@ -50,7 +50,7 @@ export async function performLogin() {
 
   return new Promise<{ token: string }>((resolve, reject) => {
     const server = Bun.serve({
-      port: 0,
+      port: 3001,
       async fetch(req) {
         const url = new URL(req.url);
 

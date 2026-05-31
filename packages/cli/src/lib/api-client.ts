@@ -1,21 +1,27 @@
 import { hc } from "hono/client";
 import type { AppType } from "@easycode/server";
-
-function getAuthToken(): string | null {
-  return process.env.CLERK_SESSION_TOKEN ?? null;
-}
-
-function createHeaders(): Record<string, string> {
-  const token = getAuthToken();
-  if (token) {
-    return { Authorization: `Bearer ${token}` };
-  }
-  return {};
-}
+import { clearAuth, getAuth } from "./auth";
 
 export const apiClient = hc<AppType>(
   process.env.API_URL ?? "http://localhost:3000",
   {
-    headers: createHeaders(),
+    fetch: async (
+      input: Parameters<typeof fetch>[0],
+      init?: Parameters<typeof fetch>[1]
+    ) => {
+      const headers = new Headers(init?.headers);
+      const auth = getAuth();
+
+      if (auth) {
+        headers.set("Authorization", `Bearer ${auth.token}`);
+      }
+
+      const response = await fetch(input, { ...init, headers });
+      if (response.status === 401) {
+        clearAuth();
+      }
+
+      return response;
+    }
   }
 );

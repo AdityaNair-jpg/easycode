@@ -1,12 +1,11 @@
 import { Hono } from "hono";
-import { HTTPException } from "hono/http-exception";
+// import { HTTPException } from "hono/http-exception";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
-import * as Sentry from "@sentry/hono/bun";
-import { getAuth } from "@hono/clerk-auth";
 import { db } from "@easycode/database/client";
 import { Role, Mode, MessageStatus } from "@easycode/database/enums";
 import { findSupportedChatModel } from "@easycode/shared";
+import type { AuthenticatedEnv } from "../middleware/require-auth";
 
 const createSessionSchema = z.object({
   title: z.string(),
@@ -25,24 +24,16 @@ const createSessionSchema = z.object({
 const createSessionValidator = zValidator(
   "json", createSessionSchema, (result, c) => {
   if (!result.success) {
-    Sentry.logger.warn("Session creation validation failed", {
-        path: c.req.path,
-        issues: result.error.issues.length
-    });
-
     return c.json({ error: "Invalid request body" }, 400);
   }
 });
 
-const app = new Hono()
+const app = new Hono<AuthenticatedEnv>()
   .get("/", async (c) => {
-    const auth = getAuth(c);
-    if (!auth?.userId) {
-      throw new HTTPException(401, { message: "Unauthorized" });
-    }
+    const userId = c.get("userId");
 
     const sessions = await db.session.findMany({
-      where: { userId: auth.userId },
+      where: { userId },
       orderBy: { createdAt: "desc" },
       select: {
         id: true,
@@ -51,49 +42,51 @@ const app = new Hono()
       },
     });
 
-    Sentry.logger.info("Listed sessions", {
-        count: sessions.length,
-    })
-
     return c.json(sessions);
   })
   .get("/:id", async (c) => {
-    const auth = getAuth(c);
-    if (!auth?.userId) {
-      throw new HTTPException(401, { message: "Unauthorized" });
-    }
+    // MOCK: Uncomment to simulate slow session loading
+    // await new Promise((r) => setTimeout(r, 5000))
+
+    // MOCK: Uncomment to simulate session loading error
+    // throw new HTTPException(
+    //   500, 
+    //   { message: "Mock error: session loading failed" }
+    // )
 
     const id = c.req.param("id");
+    const userId = c.get("userId");
     
     const session = await db.session.findUnique({
-      where: { id, userId: auth.userId },
+      where: { id, userId },
       include: {
         messages: { orderBy: { createdAt: "asc" } },
       },
     });
 
     if (!session) {
-        Sentry.logger.warn("Session not found", {
-            sessionId: id,
-            userId: auth.userId,
-        })
       return c.json({ error: "Session not found" }, 404);
     }
 
     return c.json(session);
   })
   .post("/", createSessionValidator, async (c) => {
-    const auth = getAuth(c);
-    if (!auth?.userId) {
-      throw new HTTPException(401, { message: "Unauthorized" });
-    }
+    // MOCK: Uncomment to simulate slow session loading
+    // await new Promise((r) => setTimeout(r, 5000))
 
+    // MOCK: Uncomment to simulate session loading error
+    // throw new HTTPException(
+    //   500, 
+    //   { message: "Mock error: session loading failed" }
+    // )
+
+    const userId = c.get("userId");
     const { initialMessage, ...data } = c.req.valid("json");
 
     const session = await db.session.create({
       data: {
         ...data,
-        userId: auth.userId,
+        userId,
         ...(initialMessage && {
           messages: {
             create: {

@@ -1,10 +1,8 @@
 import { Hono } from "hono";
-import { HTTPException } from "hono/http-exception";
 import { streamSSE } from "hono/streaming";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import { streamText as aiStreamText, stepCountIs } from "ai";
-import { getAuth } from "@hono/clerk-auth";
 import { db } from "@easycode/database/client";
 import { Mode, MessageStatus } from "@easycode/database/enums";
 import type { Prisma } from "@easycode/database";
@@ -13,10 +11,11 @@ import {
   type MessagePart,
   toolCallArgsSchema,
   messagePartsSchema,
-} from "@easycode/shared";
+} from "@nightcode/shared";
 import { createTools } from "../tools";
 import { buildSystemPrompt } from "../system-prompt";
 import { isSupportedChatModel, resolveChatModel } from "../lib/models";
+import type { AuthenticatedEnv } from "../middleware/require-auth";
 
 const submitSchema = z.object({
   content: z.string(),
@@ -254,17 +253,13 @@ async function streamAIResponse(
   }
 };
 
-const app = new Hono()
+const app = new Hono<AuthenticatedEnv>()
   .post("/:sessionId/resume", async (c) => {
-    const auth = getAuth(c);
-    if (!auth?.userId) {
-      throw new HTTPException(401, { message: "Unauthorized" });
-    }
-
     const sessionId = c.req.param("sessionId");
+    const userId = c.get("userId");
 
     const session = await db.session.findUnique({
-      where: { id: sessionId, userId: auth.userId },
+      where: { id: sessionId, userId },
       include: { messages: { orderBy: { createdAt: "asc" } } },
     });
 
@@ -331,15 +326,11 @@ const app = new Hono()
     }
   })
   .post("/:sessionId", submitValidator, async (c) => {
-    const auth = getAuth(c);
-    if (!auth?.userId) {
-      throw new HTTPException(401, { message: "Unauthorized" });
-    }
-
     const sessionId = c.req.param("sessionId");
+    const userId = c.get("userId");
 
     const session = await db.session.findUnique({
-      where: { id: sessionId, userId: auth.userId },
+      where: { id: sessionId, userId },
       include: { messages: { orderBy: { createdAt: "asc" } } },
     });
 

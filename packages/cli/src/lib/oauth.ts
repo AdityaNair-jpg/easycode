@@ -92,7 +92,7 @@ export async function performLogin() {
 
         try {
           // Exchange authorization code for Clerk tokens
-          const redirectUri = `${apiUrl}/auth/callback`;
+          const redirectUri = `http://localhost:${server.port}/callback`;
 
           const tokenRes = await fetch(`${clerkFrontendApi}/oauth/token`, {
             method: "POST",
@@ -137,7 +137,7 @@ export async function performLogin() {
     }
 
     const state = encodeState({ port, nonce });
-    const redirectUri = `${apiUrl}/auth/callback`;
+    const redirectUri = `http://localhost:${port}/callback`;
 
     const authorizeUrl = new URL(`${clerkFrontendApi}/oauth/authorize`);
     authorizeUrl.searchParams.set("response_type", "code");

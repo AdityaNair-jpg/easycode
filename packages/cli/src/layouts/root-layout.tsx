@@ -1,3 +1,6 @@
+// root-layout.tsx
+// includes provider
+
 import { Outlet } from "react-router";
 import { ToastProvider } from "../providers/toast";
 import { DialogProvider } from "../providers/dialog";

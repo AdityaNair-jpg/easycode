@@ -1,3 +1,4 @@
+import { basename } from "node:path";
 import { TextAttributes } from "@opentui/core";
 import { useTheme } from "../providers/theme";
 import { usePromptConfig } from "../providers/prompt-config";
@@ -9,7 +10,7 @@ export function StatusBar() {
 
   return (
     <box flexDirection="row" gap={1}>
-      
+
       <text fg={mode === Mode.PLAN ? colors.planMode : colors.primary}>
         {mode === Mode.PLAN ? "Plan" : "Build"}
       </text>
@@ -18,6 +19,11 @@ export function StatusBar() {
         ›
       </text>
       <text>{model}</text>
+
+      <text attributes={TextAttributes.DIM} fg={colors.dimSeparator}>
+        ›
+      </text>
+      <text attributes={TextAttributes.DIM}>{basename(process.cwd())}</text>
     </box>
   );
 };

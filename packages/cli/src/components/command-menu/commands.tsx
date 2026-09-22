@@ -1,6 +1,7 @@
 import { SUPPORTED_CHAT_MODELS } from "@easycode/shared";
-import { 
+import {
   AgentsDialogContent,
+  CwdDialogContent,
   ModelsDialogContent,
   SessionsDialogContent,
   ThemeDialogContent,
@@ -17,6 +18,17 @@ export const COMMANDS: Command[] = [
     value: "/new",
     action: (ctx) => {
       ctx.navigate("/");
+    },
+  },
+  {
+    name: "cwd",
+    description: "Set the project folder",
+    value: "/cwd",
+    action: (ctx) => {
+      ctx.dialog.open({
+        title: "Project Folder",
+        children: <CwdDialogContent />,
+      })
     },
   },
   {

@@ -1,10 +1,12 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, useMemo } from "react";
 import type { ReactNode } from "react";
+import type { SyntaxStyle } from "@opentui/core";
 import type { ThemeColors, Theme } from "../../theme";
 import { DEFAULT_THEME, THEMES } from "../../theme";
+import { createSyntaxStyle } from "../../lib/syntax-style";
 
 const CONFIG_DIR = join(homedir(), ".easycode");
 const THEME_PREFERENCES_PATH = join(CONFIG_DIR, "preferences.json");
@@ -40,6 +42,7 @@ function persistTheme(theme: Theme) {
 
 type ThemeContextValue = {
   colors: ThemeColors;
+  syntaxStyle: SyntaxStyle;
   currentTheme: Theme;
   setTheme: (theme: Theme) => void;
 };
@@ -66,9 +69,14 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     persistTheme(theme);
   }, []);
 
+  // One style per theme, shared by every markdown block. It wraps a native
+  // handle, so the previous one is freed once the new theme has rendered.
+  const syntaxStyle = useMemo(() => createSyntaxStyle(currentTheme.colors), [currentTheme]);
+  useEffect(() => () => syntaxStyle.destroy(), [syntaxStyle]);
+
   return (
     <ThemeContext.Provider 
-      value={{ colors: currentTheme.colors, currentTheme, setTheme }}>
+      value={{ colors: currentTheme.colors, syntaxStyle, currentTheme, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );

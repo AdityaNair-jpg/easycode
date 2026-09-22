@@ -56,7 +56,10 @@ export function BotMessage({
   streaming = false,
   interrupted = false,
 }: Props) {
-  const { colors } = useTheme();
+  const { colors, syntaxStyle } = useTheme();
+  // Only the part still being written is incomplete markdown
+  const lastPart = parts[parts.length - 1];
+
   return (
     <box width="100%" alignItems="center">
       {groupConsecutiveParts(parts).map((group) => (
@@ -106,7 +109,11 @@ export function BotMessage({
             if (part.type === "text") {
               return (
                 <box key={`text-${j}`} paddingX={3} width="100%">
-                  <text>{part.text}</text>
+                  <markdown
+                    content={part.text}
+                    syntaxStyle={syntaxStyle}
+                    streaming={streaming && part === lastPart}
+                  />
                 </box>
               );
             }

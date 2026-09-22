@@ -10,6 +10,7 @@ type DialogSearchListProps<T> = {
   items: T[];
   onSelect: (item: T) => void;
   onHighlight?: (item: T) => void;
+  onQueryChange?: (query: string) => void;
   filterFn: (item: T, query: string) => boolean;
   renderItem: (item: T, isSelected: boolean) => ReactNode;
   getKey: (item: T) => string;
@@ -21,6 +22,7 @@ export function DialogSearchList<T>({
   items,
   onSelect,
   onHighlight,
+  onQueryChange,
   filterFn,
   renderItem,
   getKey,
@@ -38,12 +40,13 @@ export function DialogSearchList<T>({
     const text = inputRef.current?.value ?? "";
     setSearchValue(text);
     setSelectedIndex(0);
+    onQueryChange?.(text);
 
     const scrollbox = scrollRef.current;
     if (scrollbox) {
       scrollbox.scrollTo(0);
     }
-  }, []);
+  }, [onQueryChange]);
     
   const filtered = searchValue 
     ? items.filter((item) => filterFn(item, searchValue)) : items;

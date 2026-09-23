@@ -55,7 +55,8 @@ export function buildSystemPrompt({ cwd, mode }: SystemPromptParams): string {
     ### Rules
     1. **Be decisive.** Use glob/grep to find what's relevant, then read only those files. Don't read every file in the project.
     2. **Never re-read files you already read** in this conversation.
-    3. **Batch your tool calls.** Call multiple tools in parallel when possible (e.g. read 5 files at once, not one at a time).`);
+    3. **Batch your tool calls.** Call multiple tools in parallel when possible (e.g. read 5 files at once, not one at a time).
+    4. **Earlier failures are not permanent.** The environment can change between messages, for example when the user fixes something. When asked to retry, or when a tool failed earlier in the conversation, call it again and go by the new result.`);
   }
 
     if (cwd && mode === "BUILD") {
@@ -73,7 +74,8 @@ export function buildSystemPrompt({ cwd, mode }: SystemPromptParams): string {
     1. **Be decisive.** Use glob/grep to find what's relevant, then read only those files. Don't read every file in the project.
     2. **Never re-read files you already read** in this conversation.
     3. **Batch your tool calls.** Call multiple tools in parallel when possible (e.g. read 5 files at once, not one at a time).
-    4. **Use editFile for small changes** to existing files. Only use writeFile when creating new files or rewriting most of a file.`);
+    4. **Use editFile for small changes** to existing files. Only use writeFile when creating new files or rewriting most of a file.
+    5. **Earlier failures are not permanent.** The environment can change between messages, for example when the user fixes something. When asked to retry, or when a tool failed earlier in the conversation, call it again and go by the new result.`);
   }
 
   return parts.join("\n");

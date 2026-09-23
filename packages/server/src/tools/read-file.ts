@@ -1,4 +1,4 @@
-import { resolve, relative } from "path";
+import { resolveProjectPath } from "./project-path";
 import { readFile } from "fs/promises";
 import { tool } from "ai";
 import { z } from "zod";
@@ -13,18 +13,8 @@ export function createReadFileTool(cwd: string) {
       path: z.string().describe("Relative path to the file to read"),
     }),
     execute: async ({ path }) => {
-      const resolved = resolve(cwd, path);
-      const rel = relative(cwd, resolved);
-
-      if (
-        rel.startsWith("..") ||
-        (resolve(resolved) !== resolved && rel.startsWith(".."))
-      ) {
-        return { error: "Path is outside the project directory" };
-      }
-
-      // Ensure resolved path is still within cwd
-      if (!resolved.startsWith(cwd)) {
+      const resolved = resolveProjectPath(cwd, path);
+      if (!resolved) {
         return { error: "Path is outside the project directory" };
       }
 

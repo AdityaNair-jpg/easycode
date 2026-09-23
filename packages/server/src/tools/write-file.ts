@@ -1,4 +1,5 @@
-import { resolve, relative, dirname } from "path";
+import { resolveProjectPath } from "./project-path";
+import { relative, dirname } from "path";
 import { writeFile, mkdir } from "fs/promises";
 import { tool } from "ai";
 import { z } from "zod";
@@ -12,9 +13,8 @@ export function createWriteFileTool(cwd: string) {
       content: z.string().describe("The full content to write to the file"),
     }),
     execute: async ({ path, content }) => {
-      const resolved = resolve(cwd, path);
-
-      if (!resolved.startsWith(cwd)) {
+      const resolved = resolveProjectPath(cwd, path);
+      if (!resolved) {
         return { error: "Path is outside the project directory" };
       }
 

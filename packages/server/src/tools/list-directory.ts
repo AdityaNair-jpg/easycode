@@ -1,4 +1,5 @@
-import { resolve, relative, join } from "path";
+import { resolveProjectPath } from "./project-path";
+import { relative, join } from "path";
 import { readdir, stat } from "fs/promises";
 import { tool } from "ai";
 import { z } from "zod";
@@ -14,9 +15,8 @@ export function createListDirectoryTool(cwd: string) {
         .default("."),
     }),
     execute: async ({ path }) => {
-      const resolved = resolve(cwd, path);
-
-      if (!resolved.startsWith(cwd)) {
+      const resolved = resolveProjectPath(cwd, path);
+      if (!resolved) {
         return { error: "Path is outside the project directory" };
       }
 

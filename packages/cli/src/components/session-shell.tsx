@@ -1,7 +1,7 @@
-import { TextAttributes } from "@opentui/core";
 import { useMemo, type ReactNode } from "react";
 import { InputBar } from "./input-bar";
 import { Spinner } from "./spinner";
+import { ModeHint } from "./mode-hint";
 import { ConversationScrollAccel } from "../lib/scroll-acceleration";
 
 type Props = {
@@ -61,10 +61,7 @@ export function SessionShell({
           ) : null}
         </box>
 
-        <box flexDirection="row" gap={1} flexShrink={0} marginLeft="auto">
-          <text>tab</text>
-          <text attributes={TextAttributes.DIM}>agents</text>
-        </box>
+        <ModeHint disabled={inputDisabled} />
       </box>
     </box>
   );

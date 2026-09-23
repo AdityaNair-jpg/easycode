@@ -65,3 +65,43 @@ export function resolveShell(): Shell | null {
   return resolvedShell;
 };
 
+export type ShellCheck = { ok: true; name: string } | { ok: false; reason: string };
+
+const SHELL_CHECK_TTL_MS = 60_000;
+const SHELL_CHECK_TIMEOUT_MS = 5_000;
+let lastShellCheck: { at: number; result: ShellCheck } | null = null;
+
+// Actually runs the shell, and checks mkdir resolves too, so the result
+// reflects what a real command would hit rather than whether bash exists
+async function runShellCheck(): Promise<ShellCheck> {
+  const shell = resolveShell();
+  if (!shell) return { ok: false, reason: "no bash shell was found (on Windows, install Git for Windows)" };
+
+  try {
+    const proc = Bun.spawn([shell.executable, "-c", "command -v mkdir >/dev/null && echo ok"], {
+      stdout: "pipe",
+      stderr: "pipe",
+      env: { ...shell.env, TERM: "dumb" },
+    });
+    const timer = setTimeout(() => proc.kill(), SHELL_CHECK_TIMEOUT_MS);
+    const [stdout, stderr] = await Promise.all([
+      new Response(proc.stdout).text(),
+      new Response(proc.stderr).text(),
+    ]);
+    clearTimeout(timer);
+
+    if ((await proc.exited) === 0 && stdout.trim() === "ok") return { ok: true, name: shell.name };
+    return { ok: false, reason: stderr.trim() || `the check exited with code ${proc.exitCode}` };
+  } catch (error) {
+    return { ok: false, reason: error instanceof Error ? error.message : String(error) };
+  }
+};
+
+export async function checkShell(): Promise<ShellCheck> {
+  if (lastShellCheck && Date.now() - lastShellCheck.at < SHELL_CHECK_TTL_MS) {
+    return lastShellCheck.result;
+  }
+  const result = await runShellCheck();
+  lastShellCheck = { at: Date.now(), result };
+  return result;
+};

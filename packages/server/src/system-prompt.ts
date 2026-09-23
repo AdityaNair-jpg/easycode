@@ -1,4 +1,11 @@
 import type { Mode } from "@easycode/database/enums";
+import { resolveShell } from "./lib/shell";
+
+const PLATFORM_NAMES: Partial<Record<NodeJS.Platform, string>> = {
+  win32: "Windows",
+  darwin: "macOS",
+  linux: "Linux",
+};
 
 type SystemPromptParams = {
   cwd: string | null;
@@ -16,6 +23,7 @@ export function buildSystemPrompt({ cwd, mode }: SystemPromptParams): string {
 
   if (cwd) {
     parts.push(`\nThe user's project directory is: ${cwd}`);
+    parts.push(`The operating system is ${PLATFORM_NAMES[process.platform] ?? process.platform}.`);
   }
 
   if (mode === "PLAN") {
@@ -60,7 +68,7 @@ export function buildSystemPrompt({ cwd, mode }: SystemPromptParams): string {
     - **listDirectory** — List entries in a directory
     - **glob** — Find files matching a pattern (e.g. "**/*.ts")
     - **grep** — Search file contents with regex
-    - **bash** — Run a shell command
+    - **bash** — Run a shell command in ${resolveShell()?.name ?? "bash"}. Use POSIX commands (mkdir -p, ls, grep), even on Windows
     ### Rules
     1. **Be decisive.** Use glob/grep to find what's relevant, then read only those files. Don't read every file in the project.
     2. **Never re-read files you already read** in this conversation.

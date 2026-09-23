@@ -11,7 +11,7 @@ import {
   type MessagePart,
   toolCallArgsSchema,
   messagePartsSchema,
-} from "@nightcode/shared";
+} from "@easycode/shared";
 import { createTools } from "../tools";
 import { buildSystemPrompt } from "../system-prompt";
 import { isSupportedChatModel, resolveChatModel } from "../lib/models";

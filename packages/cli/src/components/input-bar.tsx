@@ -602,7 +602,7 @@ export function InputBar({ onSubmit, disabled = false }: Props) {
             onContentChange={handleTextareaContentChange}
             placeholder={`Ask anything... "Fix a bug in the database"`}
           />
-          <StatusBar />
+          <StatusBar disabled={disabled} />
         </box>
       </box>
     </box>

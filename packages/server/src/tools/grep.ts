@@ -1,4 +1,5 @@
-import { resolve, relative } from "path";
+import { resolveProjectPath } from "./project-path";
+import { relative } from "path";
 import { tool } from "ai";
 import { z } from "zod";
 
@@ -20,9 +21,8 @@ export function createGrepTool(cwd: string) {
         .optional(),
     }),
     execute: async ({ pattern, path, include }) => {
-      const resolved = resolve(cwd, path);
-
-      if (!resolved.startsWith(cwd)) {
+      const resolved = resolveProjectPath(cwd, path);
+      if (!resolved) {
         return { error: "Path is outside the project directory" };
       }
 

@@ -22,7 +22,6 @@ import { usePromptConfig } from "../providers/prompt-config";
 import { Mode } from "@easycode/database/enums";
 
 const MAX_VISIBLE_MENTIONS = 8;
-const CURRENT_DIRECTORY = process.cwd();
 const MAX_FALLBACK_MENTION_CANDIDATES = 32;
 const MENTION_QUERY_CHARACTER = /[A-Za-z0-9._/-]/;
 const RECURSIVE_MENTION_IGNORED_DIRECTORIES = new Set(["node_modules"]);
@@ -39,7 +38,7 @@ type MentionCandidate = {
 };
 
 function isWithinCurrentDirectory(targetPath: string) {
-  const relativePath = relative(CURRENT_DIRECTORY, targetPath);
+  const relativePath = relative(process.cwd(), targetPath);
   return relativePath === "" 
     || (!relativePath.startsWith("..") 
     && !isAbsolute(relativePath));
@@ -114,7 +113,7 @@ async function getMentionCandidates(query: string): Promise<MentionCandidate[]> 
       ? normalizedQuery
       : normalizedQuery.slice(lastSlashIndex + 1);
 
-  const absoluteDirectory = resolve(CURRENT_DIRECTORY, directoryPart || ".");
+  const absoluteDirectory = resolve(process.cwd(), directoryPart || ".");
   if (!isWithinCurrentDirectory(absoluteDirectory)) {
     return [];
   }
@@ -190,7 +189,7 @@ async function getMentionCandidates(query: string): Promise<MentionCandidate[]> 
       }
     };
 
-    await visit(CURRENT_DIRECTORY, "");
+    await visit(process.cwd(), "");
     return fallbackMatches.sort((left, right) => left.path.localeCompare(right.path));
   } catch {
     return [];
@@ -603,7 +602,7 @@ export function InputBar({ onSubmit, disabled = false }: Props) {
             onContentChange={handleTextareaContentChange}
             placeholder={`Ask anything... "Fix a bug in the database"`}
           />
-          <StatusBar />
+          <StatusBar disabled={disabled} />
         </box>
       </box>
     </box>

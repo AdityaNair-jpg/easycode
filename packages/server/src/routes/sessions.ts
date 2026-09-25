@@ -38,6 +38,7 @@ const app = new Hono<AuthenticatedEnv>()
       select: {
         id: true,
         title: true,
+        cwd: true,
         createdAt: true,
       },
     });

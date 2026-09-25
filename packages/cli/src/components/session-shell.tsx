@@ -1,7 +1,8 @@
-import { TextAttributes } from "@opentui/core";
-import type { ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
 import { InputBar } from "./input-bar";
 import { Spinner } from "./spinner";
+import { ModeHint } from "./mode-hint";
+import { ConversationScrollAccel } from "../lib/scroll-acceleration";
 
 type Props = {
   children?: ReactNode;
@@ -18,6 +19,8 @@ export function SessionShell({
   loading = false,
   interruptible = false,
 }: Props) {
+  const scrollAcceleration = useMemo(() => new ConversationScrollAccel(), []);
+
   return (
     <box
       flexDirection="column"
@@ -28,7 +31,13 @@ export function SessionShell({
       paddingX={2}
       gap={1}
     >
-      <scrollbox flexGrow={1} width="100%" stickyScroll stickyStart="bottom">
+      <scrollbox
+        flexGrow={1}
+        width="100%"
+        stickyScroll
+        stickyStart="bottom"
+        scrollAcceleration={scrollAcceleration}
+      >
         <box gap={1}>{children}</box>
       </scrollbox>
       <box flexShrink={0}>
@@ -52,10 +61,7 @@ export function SessionShell({
           ) : null}
         </box>
 
-        <box flexDirection="row" gap={1} flexShrink={0} marginLeft="auto">
-          <text>tab</text>
-          <text attributes={TextAttributes.DIM}>agents</text>
-        </box>
+        <ModeHint disabled={inputDisabled} />
       </box>
     </box>
   );

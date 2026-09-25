@@ -1,5 +1,7 @@
+import { existsSync } from "node:fs";
 import { tool } from "ai";
 import { z } from "zod";
+import { resolveShell } from "../lib/shell";
 
 const MAX_OUTPUT = 20_000;
 const DEFAULT_TIMEOUT = 30_000;
@@ -16,12 +18,28 @@ export function createBashTool(cwd: string) {
         .default(DEFAULT_TIMEOUT),
     }),
     execute: async ({ command, timeout }) => {
+      const shell = resolveShell();
+      if (!shell) {
+        return {
+          error:
+            "No bash shell is available. On Windows, commands run through Git Bash: install Git for Windows (https://git-scm.com/download/win) and restart the server.",
+        };
+      }
+
+      // A missing cwd makes spawn report ENOENT for bash.exe itself, which
+      // reads as "bash is not installed" when the folder is what's gone
+      if (!existsSync(cwd)) {
+        return {
+          error: `The project folder no longer exists: ${cwd}. It may have been moved or deleted; start a session in the right folder.`,
+        };
+      }
+
       try {
-        const proc = Bun.spawn(["bash", "-c", command], {
+        const proc = Bun.spawn([shell.executable, "-c", command], {
           cwd,
           stdout: "pipe",
           stderr: "pipe",
-          env: { ...process.env, TERM: "dumb" },
+          env: { ...shell.env, TERM: "dumb" },
         });
 
         const timer = setTimeout(() => {

@@ -1,9 +1,9 @@
-import { SUPPORTED_CHAT_MODELS } from "@easycode/shared";
-import { 
+import {
   AgentsDialogContent,
-  ModelsDialogContent,
   SessionsDialogContent,
   ThemeDialogContent,
+  openCwdDialog,
+  openModelsDialog,
 } from "../dialogs";
 import type { Command } from "./types";
 
@@ -17,6 +17,14 @@ export const COMMANDS: Command[] = [
     value: "/new",
     action: (ctx) => {
       ctx.navigate("/");
+    },
+  },
+  {
+    name: "cwd",
+    description: "Set the project folder",
+    value: "/cwd",
+    action: (ctx) => {
+      openCwdDialog(ctx.dialog);
     },
   },
   {
@@ -35,15 +43,7 @@ export const COMMANDS: Command[] = [
     description: "Select AI model for generation",
     value: "/models",
     action: (ctx) => {
-      ctx.dialog.open({
-        title: "Select Model",
-        children: (
-          <ModelsDialogContent
-            models={SUPPORTED_CHAT_MODELS.map((model) => model.id)}
-            onSelectModel={ctx.setModel}
-          />
-        ),
-      })
+      openModelsDialog(ctx.dialog, ctx.setModel);
     },
   },
   {

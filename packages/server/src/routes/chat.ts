@@ -11,9 +11,10 @@ import {
   type MessagePart,
   toolCallArgsSchema,
   messagePartsSchema,
-} from "@nightcode/shared";
+} from "@easycode/shared";
 import { createTools } from "../tools";
 import { buildSystemPrompt } from "../system-prompt";
+import { checkShell } from "../lib/shell";
 import { isSupportedChatModel, resolveChatModel } from "../lib/models";
 import type { AuthenticatedEnv } from "../middleware/require-auth";
 
@@ -71,6 +72,24 @@ type StreamParams = {
   abortController: AbortController;
 };
 
+type ModelHistory = { role: "user" | "assistant"; content: string }[];
+
+// A model reads its own earlier "bash is broken" replies as proof it still is,
+// and stops even trying once the environment is fixed. A fact checked just now,
+// placed on the latest message where it outweighs that history, fixes it. The
+// note goes only to the model; nothing about the stored conversation changes.
+async function withShellCheck(history: ModelHistory): Promise<ModelHistory> {
+  const last = history[history.length - 1];
+  if (!last || last.role !== "user") return history;
+
+  const check = await checkShell();
+  const note = check.ok
+    ? `[Environment check, run just now: the bash tool works (${check.name}). Any bash errors earlier in this conversation are out of date.]`
+    : `[Environment check, run just now: the bash tool is unavailable: ${check.reason}]`;
+
+  return [...history.slice(0, -1), { ...last, content: `${last.content}\n\n${note}` }];
+};
+
 async function streamAIResponse(
   stream: Parameters<Parameters<typeof streamSSE>[1]>[0],
   params: StreamParams,
@@ -113,7 +132,8 @@ async function streamAIResponse(
     const result = aiStreamText({
       model: resolvedModel.model,
       system: buildSystemPrompt({ cwd, mode }),
-      messages: history,
+      // Only Build mode has the bash tool
+      messages: mode === Mode.BUILD && tools ? await withShellCheck(history) : history,
       tools,
       stopWhen: tools ? stepCountIs(50) : undefined,
       abortSignal: abortController.signal,

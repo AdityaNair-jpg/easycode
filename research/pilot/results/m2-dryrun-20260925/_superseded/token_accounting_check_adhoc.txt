@@ -1,0 +1,7 @@
+{
+  steps: 95,
+  totalEqualsInputPlusOutput: 95,
+  stepsWithReasoning: 90,
+  reasoningTokens: 6351,
+  outputTokens: 2783,
+}

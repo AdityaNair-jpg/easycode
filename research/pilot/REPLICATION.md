@@ -42,6 +42,8 @@ after changes A and B used `cp1-changes`.
 | `harness/score.ts <id>` | `runs/<id>/manifest.json`, `runs/<id>/trials/*.json.gz` | `results/<id>/summary.csv` | every number |
 | `harness/report.ts <id> [seed]` | `summary.csv`, the manifest, the raw records | `results/<id>/REPORT.md`, `retry_by_condition.svg`, `renders/*.md`, `review_sample.csv` | the report |
 | `harness/rebuild.ts [id ...]` | all of the above | all of the above | one command to rebuild every offline output |
+| `harness/project-cost.ts <id>` | `results/<id>/summary.csv`, the manifest | `results/<id>/cost_projection.md` | measured and projected cost |
+| `harness/check-tokens.ts <id>` | the raw records | `results/<id>/token_accounting_check.md` | Gemini token accounting check |
 
 `score.ts` and `report.ts` never overwrite a changed output. An older version is moved to
 `results/<id>/_superseded/<time>/`. An existing `review_sample.csv` is never touched, since it may
@@ -49,8 +51,9 @@ hold human labels.
 
 ## Runs
 
-No model runs exist yet (Milestone 1 ended at Checkpoint 1 with no model calls). Each run adds a
-row here once it has one.
+Each run adds a row here. The raw records of every run are committed under `runs/<run_id>/`, and
+`bun research/pilot/harness/rebuild.ts <run_id>` regenerates its results offline.
 
 | run_id | purpose | command | report |
 |---|---|---|---|
+| m2-dryrun-20260925 | Milestone 2 dry run (gemini-2.5-flash; F01, F03, F07; 1 rep; 10 controls per type) | see NOTEBOOK.md, 2026-09-25 | `results/m2-dryrun-20260925/REPORT.md`, `cost_projection.md` |

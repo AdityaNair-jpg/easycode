@@ -45,7 +45,8 @@ async function writeGenerated(path: string, content: string): Promise<void> {
 
 export function figureSvg(panels: { model: string; points: { condition: string; w: Interval }[] }[]): string {
   const pw = 250, ph = 210, left = 56, top = 92, gap = 24, bottom = 58;
-  const width = left + panels.length * pw + (panels.length - 1) * gap + 16;
+  // Wide enough for the title lines even with a single panel
+  const width = Math.max(520, left + panels.length * pw + (panels.length - 1) * gap + 16);
   const height = top + ph + bottom;
   const y = (v: number) => top + ph - v * ph;
   const parts: string[] = [
@@ -135,7 +136,7 @@ export async function writeReport(runId: string, opts: { runsRoot?: string; resu
   for (const r of rejected) lines.push(`- ${r.unit} ${r.id} (${r.model_requested}): see \`${r.source}\``);
   if (rejected.length) lines.push("");
   const flagged = rows.filter((r) => yes(r.flag_dotdot) || yes(r.flag_stash));
-  lines.push(`**Tool calls with \`..\` or \`_stash\` in their arguments (flagged, not excluded): ${flagged.length} turns.**`, "");
+  lines.push(`**Turns with a tool call whose arguments contain \`..\` or \`_stash\` (flagged, not excluded): ${flagged.length}.** The check is a plain substring match, so text such as \`...\` inside a written file also trips it; read the render.`, "");
   if (flagged.length) lines.push(...table(["unit", "id", "model", "..", "_stash", "render"], flagged.map((r) => [r.unit, r.id, r.model_requested, yes(r.flag_dotdot) ? "yes" : "", yes(r.flag_stash) ? "yes" : "", renderOf(r.source)])), "");
   const mismatch = rows.filter((r) => yes(r.state_mismatch));
   const toolLog = rows.filter((r) => yes(r.tool_log_mismatch));

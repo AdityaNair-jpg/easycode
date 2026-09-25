@@ -1,0 +1,12 @@
+{
+  "finishedAt": "2026-09-25T13:28:24.222Z",
+  "counts": {
+    "trials": 3,
+    "controls": 20
+  },
+  "spentThisRunUsd": 0.0658208,
+  "spentTotalUsd": 0.0658208,
+  "stop": {
+    "requested": false
+  }
+}

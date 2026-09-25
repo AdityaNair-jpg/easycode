@@ -75,3 +75,6 @@ study to `research/pilot/`, so the ledger lives here and indexes this folder onl
 | evidence/cp1-changes/fake_trials_20260925T132504Z.json, fake_trial_x0005/x0006, condition_examples_x0006_* | evidence | current | 10/10 branches each, longest path 91, only project\ in work folders | 2026-09-25 | Prompt 4 |
 | evidence/cp1-changes/smoke_gitbash-launch_20260925T132437Z.json | evidence | current | 7/7 tools at the new roots | 2026-09-25 | Prompt 4 |
 | D:\work, D:\work-arc | workspaces (outside the repo) | current | trial workspaces and archives, never deleted | 2026-09-25 | Prompt 4 |
+| harness/project-cost.ts, harness/check-tokens.ts | code | current | cost projection; Gemini token accounting check | 2026-09-25 | Prompt 4 |
+| runs/m2-dryrun-20260925/ | raw data | current | manifest, 23 records, completion (Milestone 2) | 2026-09-25 | Prompt 4 |
+| results/m2-dryrun-20260925/ | results | current | summary.csv, REPORT.md, figure, 23 renders, review_sample.csv, cost_projection.md, token_accounting_check.md | 2026-09-25 | Prompt 4 |

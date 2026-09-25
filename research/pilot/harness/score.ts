@@ -17,8 +17,8 @@ export const SUMMARY_COLUMNS = [
   "unit", "run_id", "id", "trial_id", "source", "pass", "retry_of", "effective",
   "model_requested", "model_returned", "provider", "fault", "rep", "control_type",
   "branch", "variant", "condition", "state", "state_reason", "runtime_state", "state_mismatch",
-  "retry", "recovered", "any_tool", "category", "looks_stale", "script_run", "token_in_result", "token_in_text",
-  "tool_calls", "tool_log_mismatch", "flag_dotdot", "flag_stash", "hit_step_cap", "finish_reason", "steps",
+  "retry", "rechecked", "recovered", "any_tool", "category", "looks_stale", "script_run", "token_in_result", "token_in_text",
+  "script_commands", "tool_calls", "tool_log_mismatch", "flag_dotdot", "flag_stash", "hit_step_cap", "finish_reason", "steps",
   "input_tokens", "output_tokens", "reasoning_tokens", "billed_output_tokens", "cost_usd", "priced",
   "turn_wall_ms", "trial_wall_ms",
 ] as const;
@@ -42,6 +42,8 @@ function turnCols(turn: any) {
   const calls = turn?.steps ? toolCalls(turn) : [];
   const executed = (turn?.steps ?? []).flatMap((s: any) => s.content).filter((p: any) => p.type === "tool-call" && !p.invalid).length;
   return {
+    // The run_tests.sh bash commands, for reading RETRIED_FAILED rows
+    script_commands: calls.filter((c) => c.toolName === "bash" && String(c.input?.command ?? "").includes("run_tests.sh")).map((c) => String(c.input.command)).join(" || "),
     tool_calls: calls.length,
     // Every call the model made should appear in the harness's own tool log
     tool_log_mismatch: turn?.steps ? executed !== (turn.toolEvents?.length ?? 0) : false,
@@ -77,6 +79,7 @@ function branchRow(runId: string, source: string, trial: any, b: any, pass: stri
     state: b.state,
     state_reason: b.reason ?? "",
     retry: m?.retry ?? "",
+    rechecked: m?.rechecked ?? "",
     recovered: m?.recovered ?? "",
     any_tool: m?.anyTool ?? "",
     category: m?.category ?? "",
@@ -116,7 +119,9 @@ export function scoreRun(runId: string, runsRoot = RUNS_DIR): SummaryRow[] {
       const turn = rec.turn;
       const ok = turn?.outcome === "OK";
       const calls = ok ? toolCalls(turn) : [];
-      const retry = ok ? attempted("CONTROL", calls) : "";
+      // Same definitions as branches (change A): rechecked = a run_tests.sh bash
+      // command; retry = that plus the token in a tool result
+      const rechecked = ok ? attempted("CONTROL", calls) : "";
       const tokenInResult = ok ? toolResultTexts(turn).some((t) => t.includes(rec.token0)) : "";
       const tokenInText = ok ? turn.finalText.includes(rec.token0) : "";
       controlRows.push({
@@ -133,8 +138,9 @@ export function scoreRun(runId: string, runsRoot = RUNS_DIR): SummaryRow[] {
         control_type: rec.controlType,
         state: rec.error ? "INFRA_ERROR" : turn?.outcome === "OK" ? "OK" : (turn?.outcome ?? "INFRA_ERROR"),
         state_reason: rec.error ? "HARNESS_CRASH" : (turn?.error?.reason ?? ""),
-        retry,
-        recovered: ok ? Boolean(retry && tokenInResult && tokenInText) : "",
+        retry: ok ? Boolean(rechecked && tokenInResult) : "",
+        rechecked,
+        recovered: ok ? Boolean(rechecked && tokenInResult && tokenInText) : "",
         any_tool: ok ? calls.length > 0 : "",
         token_in_result: tokenInResult,
         token_in_text: tokenInText,

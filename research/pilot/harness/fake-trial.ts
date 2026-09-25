@@ -2,7 +2,7 @@
 // exercise every file operation (fault, snapshot, ten branch archives,
 // restores) and measure the longest path. Also writes the exact system
 // prompts and one example of each condition's messages from a fake turn 1.
-// No API calls. Usage, from the repo root: bun research/pilot/harness/fake-trial.ts
+// No API calls. Usage, from the repo root: bun research/pilot/harness/fake-trial.ts [evidence-folder]
 import { existsSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { gzipSync } from "bun";
@@ -12,7 +12,8 @@ import { stamp, writeEvidence } from "./evidence.ts";
 import { obedientAgent } from "./fake-model.ts";
 import { CONDITIONS, CONDITION_NAMES } from "./history.ts";
 import { nextIds } from "./ids.ts";
-import { WS_DIR, assertRunFromRepoRoot, repoRel } from "./paths.ts";
+import { DEFAULT_ROOTS, assertRunFromRepoRoot, repoRel } from "./paths.ts";
+import { readdirSync as listDir } from "node:fs";
 import { prepareShell } from "./shell-env.ts";
 import { runTrial, type RunContext, type TrialRecord } from "./trial.ts";
 import type { FaultId } from "./faults.ts";
@@ -32,11 +33,10 @@ export function allPaths(root: string): string[] {
 }
 
 function trialFootprint(trialId: string): string[] {
+  const roots = DEFAULT_ROOTS;
   return [
-    ...allPaths(join(WS_DIR, trialId)),
-    ...allPaths(join(WS_DIR, "_stash", trialId)),
-    ...allPaths(join(WS_DIR, "_snap", trialId)),
-    join(WS_DIR, "_logs", `${trialId}.jsonl`),
+    ...allPaths(join(roots.work, trialId)),
+    ...allPaths(join(roots.arc, trialId)),
   ];
 }
 
@@ -107,10 +107,11 @@ if (import.meta.main) {
   prepareShell();
   const at = stamp();
   const faults: FaultId[] = ["F02", "F01"];
-  const ids = nextIds(WS_DIR, "x", faults.length);
+  const set = process.argv[2] ?? "m1";
+  const ids = nextIds(DEFAULT_ROOTS, "x", faults.length);
   const ctx: RunContext = {
     runId: `fake-${at}`,
-    wsRoot: WS_DIR,
+    roots: DEFAULT_ROOTS,
     budget: new Budget(1),
     versions: (() => {
       const e = captureEnvironment().code;
@@ -129,13 +130,15 @@ if (import.meta.main) {
     const paths = trialFootprint(r.trialId);
     const longest = paths.reduce((a, b) => (b.length > a.length ? b : a), "");
     const archives = r.branches.map((b) => b.archive.map((a) => repoRel(a.to)));
-    const record = writeEvidence("m1", `fake_trial_${r.trialId}_${fault}_${at}.json.gz`, gzipSync(Buffer.from(JSON.stringify(r))));
+    const record = writeEvidence(set, `fake_trial_${r.trialId}_${fault}_${at}.json.gz`, gzipSync(Buffer.from(JSON.stringify(r))));
     summary.push({
       trialId: r.trialId,
       fault,
       turn1: r.runtimeValidity.state,
       branches: r.branches.map((b) => `${b.id}:${b.state}`),
       archives,
+      // Nothing may sit next to project (deviation D11)
+      workDirEntries: listDir(join(DEFAULT_ROOTS.work, r.trialId)),
       pathCount: paths.length,
       longestPath: longest,
       longestPathLength: longest.length,
@@ -143,14 +146,18 @@ if (import.meta.main) {
       record: repoRel(record),
     });
     if (fault === "F01") {
-      const ex = writeEvidence("m1", `condition_examples_${r.trialId}_${at}.md`, examples(r));
+      const ex = writeEvidence(set, `condition_examples_${r.trialId}_${at}.md`, examples(r));
       console.log(`examples: ${repoRel(ex)}`);
     }
     console.log(`${r.trialId} ${fault}: turn1 ${r.runtimeValidity.state}; ${r.branches.filter((b) => b.state === "RAN").length}/10 branches ran; longest path ${longest.length} chars`);
   }
-  const out = writeEvidence("m1", `fake_trials_${at}.json`, JSON.stringify({ summary }, null, 2));
+  const out = writeEvidence(set, `fake_trials_${at}.json`, JSON.stringify({ summary }, null, 2));
   console.log(`evidence: ${repoRel(out)}`);
   const worst = Math.max(...summary.map((s) => s.longestPathLength));
   console.log(`longest path overall: ${worst} chars`);
-  process.exit(worst < 200 && summary.every((s) => s.branches.every((b) => b.endsWith(":RAN"))) ? 0 : 1);
+  // Only project may be here; after an F02 trial even that is absent, because
+  // the workspace ends restored to turn 1, when the folder was missing
+  const alone = summary.every((s) => s.workDirEntries.every((e: string) => e === "project"));
+  console.log(`nothing but project\ in each work folder: ${alone}`);
+  process.exit(worst < 200 && alone && summary.every((s) => s.branches.every((b) => b.endsWith(":RAN"))) ? 0 : 1);
 }

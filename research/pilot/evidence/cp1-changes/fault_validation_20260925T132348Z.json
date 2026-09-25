@@ -1,0 +1,1088 @@
+{
+  "environment": {
+    "capturedAt": "2026-09-25T13:24:13.626Z",
+    "windows": {
+      "ver": "Microsoft Windows [Version 10.0.26200.9445]",
+      "os": "Microsoft Windows 11 Home Single Language | 10.0.26200 | build 26200"
+    },
+    "platform": "win32",
+    "arch": "x64",
+    "bun": {
+      "version": "1.4.2",
+      "revision": "744846f844374847c902b5e7fd59b4342a51ef99",
+      "execPath": "C:\\Users\\Aditya\\AppData\\Roaming\\npm\\node_modules\\bun\\bin\\bun.exe"
+    },
+    "shell": {
+      "executable": "C:\\Program Files\\Git\\usr\\bin\\bash.exe",
+      "name": "Git Bash",
+      "bashVersion": "GNU bash, version 5.2.37(1)-release (x86_64-pc-msys)",
+      "gitVersionInShell": "git version 2.49.0.windows.1"
+    },
+    "gitVersionOnPath": "git version 2.49.0.windows.1",
+    "grepOnProcessPath": "C:\\Program Files\\Git\\usr\\bin\\grep.exe",
+    "repoRoot": "D:\\easycode",
+    "code": {
+      "pinnedEasycodeCommit": "4f126f9fd3560bc354c507567110001743db24fc",
+      "headCommit": "ec34a2938be8b373f26edbd07b1ae343add68e1a",
+      "productCodeMatchesPin": true,
+      "easycodeCommitRunAgainst": "4f126f9fd3560bc354c507567110001743db24fc",
+      "harnessCommit": "ec34a2938be8b373f26edbd07b1ae343add68e1a",
+      "harnessDirty": true
+    },
+    "packages": {
+      "ai": "6.0.191",
+      "@ai-sdk/google": "2.0.74",
+      "@ai-sdk/anthropic": "3.0.79",
+      "@ai-sdk/openai": "3.0.65"
+    }
+  },
+  "gitCeiling": "D:\\work",
+  "allOk": true,
+  "results": [
+    {
+      "id": "F01",
+      "name": "Bash unavailable",
+      "kind": "tool-level, simulated",
+      "project": "D:/work/_m1/faults-20260925T132348Z/F01/project",
+      "expectedError": "^No bash shell is available\\. On Windows, commands run through Git Bash: install Git for Windows \\(https:\\/\\/git-scm\\.com\\/download\\/win\\) and restart the server\\.$",
+      "inject": [
+        {
+          "op": "none"
+        }
+      ],
+      "before": {
+        "error": "No bash shell is available. On Windows, commands run through Git Bash: install Git for Windows (https://git-scm.com/download/win) and restart the server."
+      },
+      "failedAsExpected": true,
+      "probes": {},
+      "fix": {
+        "ops": [
+          {
+            "op": "none"
+          }
+        ],
+        "nonce": "66530eafc370",
+        "token": "86a3bdbd679366fc"
+      },
+      "after": {
+        "stdout": "RESULT: PASS 7/7 token=86a3bdbd679366fc\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "passedWithNewToken": true,
+      "verbose": {
+        "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=86a3bdbd679366fc\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "verboseOk": true,
+      "ok": true,
+      "events": [
+        {
+          "seq": 0,
+          "toolName": "bash",
+          "toolCallId": "F01-before",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:23:49.438Z",
+          "simulated": true,
+          "output": {
+            "error": "No bash shell is available. On Windows, commands run through Git Bash: install Git for Windows (https://git-scm.com/download/win) and restart the server."
+          },
+          "endedAt": "2026-09-25T13:23:49.438Z",
+          "durationMs": 0
+        },
+        {
+          "seq": 1,
+          "toolName": "bash",
+          "toolCallId": "F01-after",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:23:49.442Z",
+          "simulated": false,
+          "output": {
+            "stdout": "RESULT: PASS 7/7 token=86a3bdbd679366fc\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:23:50.338Z",
+          "durationMs": 896
+        },
+        {
+          "seq": 2,
+          "toolName": "bash",
+          "toolCallId": "F01-verbose",
+          "input": {
+            "command": "bash scripts/run_tests.sh --verbose",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:23:50.338Z",
+          "simulated": false,
+          "output": {
+            "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=86a3bdbd679366fc\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:23:51.222Z",
+          "durationMs": 884
+        }
+      ]
+    },
+    {
+      "id": "F02",
+      "name": "Project folder missing",
+      "kind": "tool-level, real",
+      "project": "D:/work/_m1/faults-20260925T132348Z/F02/project",
+      "expectedError": "^The project folder no longer exists: ",
+      "inject": [
+        {
+          "op": "move",
+          "from": "D:\\work\\_m1\\faults-20260925T132348Z\\F02\\project",
+          "to": "D:\\work-arc\\_m1\\faults-20260925T132348Z\\F02\\stash\\project",
+          "attempts": 1
+        }
+      ],
+      "before": {
+        "error": "The project folder no longer exists: D:\\work\\_m1\\faults-20260925T132348Z\\F02\\project. It may have been moved or deleted; start a session in the right folder."
+      },
+      "failedAsExpected": true,
+      "probes": {
+        "readFile": {
+          "error": "Failed to read file: ENOENT: no such file or directory, open 'D:\\work\\_m1\\faults-20260925T132348Z\\F02\\project\\README.md'"
+        }
+      },
+      "fix": {
+        "ops": [
+          {
+            "op": "move",
+            "from": "D:\\work-arc\\_m1\\faults-20260925T132348Z\\F02\\stash\\project",
+            "to": "D:\\work\\_m1\\faults-20260925T132348Z\\F02\\project",
+            "attempts": 1
+          }
+        ],
+        "nonce": "bef9ba631cae",
+        "token": "8df7dfa4e1b45967"
+      },
+      "after": {
+        "stdout": "RESULT: PASS 7/7 token=8df7dfa4e1b45967\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "passedWithNewToken": true,
+      "verbose": {
+        "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=8df7dfa4e1b45967\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "verboseOk": true,
+      "ok": true,
+      "events": [
+        {
+          "seq": 0,
+          "toolName": "bash",
+          "toolCallId": "F02-before",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:23:51.673Z",
+          "simulated": false,
+          "output": {
+            "error": "The project folder no longer exists: D:\\work\\_m1\\faults-20260925T132348Z\\F02\\project. It may have been moved or deleted; start a session in the right folder."
+          },
+          "endedAt": "2026-09-25T13:23:51.673Z",
+          "durationMs": 0
+        },
+        {
+          "seq": 1,
+          "toolName": "readFile",
+          "toolCallId": "F02-readFile",
+          "input": {
+            "path": "README.md"
+          },
+          "startedAt": "2026-09-25T13:23:51.673Z",
+          "simulated": false,
+          "output": {
+            "error": "Failed to read file: ENOENT: no such file or directory, open 'D:\\work\\_m1\\faults-20260925T132348Z\\F02\\project\\README.md'"
+          },
+          "endedAt": "2026-09-25T13:23:51.674Z",
+          "durationMs": 1
+        },
+        {
+          "seq": 2,
+          "toolName": "bash",
+          "toolCallId": "F02-after",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:23:51.679Z",
+          "simulated": false,
+          "output": {
+            "stdout": "RESULT: PASS 7/7 token=8df7dfa4e1b45967\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:23:52.562Z",
+          "durationMs": 883
+        },
+        {
+          "seq": 3,
+          "toolName": "bash",
+          "toolCallId": "F02-verbose",
+          "input": {
+            "command": "bash scripts/run_tests.sh --verbose",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:23:52.562Z",
+          "simulated": false,
+          "output": {
+            "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=8df7dfa4e1b45967\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:23:53.446Z",
+          "durationMs": 884
+        }
+      ]
+    },
+    {
+      "id": "F03",
+      "name": "Test script missing",
+      "kind": "command-level",
+      "project": "D:/work/_m1/faults-20260925T132348Z/F03/project",
+      "expectedError": "bash: scripts\\/run_tests\\.sh: No such file or directory",
+      "inject": [
+        {
+          "op": "move",
+          "from": "D:\\work\\_m1\\faults-20260925T132348Z\\F03\\project\\scripts\\run_tests.sh",
+          "to": "D:\\work-arc\\_m1\\faults-20260925T132348Z\\F03\\stash\\run_tests.sh",
+          "attempts": 1
+        }
+      ],
+      "before": {
+        "stdout": "",
+        "stderr": "bash: scripts/run_tests.sh: No such file or directory\n",
+        "exitCode": 127
+      },
+      "failedAsExpected": true,
+      "probes": {},
+      "fix": {
+        "ops": [
+          {
+            "op": "move",
+            "from": "D:\\work-arc\\_m1\\faults-20260925T132348Z\\F03\\stash\\run_tests.sh",
+            "to": "D:\\work\\_m1\\faults-20260925T132348Z\\F03\\project\\scripts\\run_tests.sh",
+            "attempts": 1
+          }
+        ],
+        "nonce": "31f9ebc597b0",
+        "token": "02b79328f67e301f"
+      },
+      "after": {
+        "stdout": "RESULT: PASS 7/7 token=02b79328f67e301f\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "passedWithNewToken": true,
+      "verbose": {
+        "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=02b79328f67e301f\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "verboseOk": true,
+      "ok": true,
+      "events": [
+        {
+          "seq": 0,
+          "toolName": "bash",
+          "toolCallId": "F03-before",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:23:53.913Z",
+          "simulated": false,
+          "output": {
+            "stdout": "",
+            "stderr": "bash: scripts/run_tests.sh: No such file or directory\n",
+            "exitCode": 127
+          },
+          "endedAt": "2026-09-25T13:23:53.971Z",
+          "durationMs": 58
+        },
+        {
+          "seq": 1,
+          "toolName": "bash",
+          "toolCallId": "F03-after",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:23:53.975Z",
+          "simulated": false,
+          "output": {
+            "stdout": "RESULT: PASS 7/7 token=02b79328f67e301f\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:23:54.846Z",
+          "durationMs": 871
+        },
+        {
+          "seq": 2,
+          "toolName": "bash",
+          "toolCallId": "F03-verbose",
+          "input": {
+            "command": "bash scripts/run_tests.sh --verbose",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:23:54.846Z",
+          "simulated": false,
+          "output": {
+            "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=02b79328f67e301f\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:23:55.722Z",
+          "durationMs": 876
+        }
+      ]
+    },
+    {
+      "id": "F04",
+      "name": "Helper library missing",
+      "kind": "command-level",
+      "project": "D:/work/_m1/faults-20260925T132348Z/F04/project",
+      "expectedError": "ERROR: cannot load lib\\/assert\\.sh",
+      "inject": [
+        {
+          "op": "move",
+          "from": "D:\\work\\_m1\\faults-20260925T132348Z\\F04\\project\\lib\\assert.sh",
+          "to": "D:\\work-arc\\_m1\\faults-20260925T132348Z\\F04\\stash\\assert.sh",
+          "attempts": 1
+        }
+      ],
+      "before": {
+        "stdout": "",
+        "stderr": "ERROR: cannot load lib/assert.sh\n",
+        "exitCode": 1
+      },
+      "failedAsExpected": true,
+      "probes": {},
+      "fix": {
+        "ops": [
+          {
+            "op": "move",
+            "from": "D:\\work-arc\\_m1\\faults-20260925T132348Z\\F04\\stash\\assert.sh",
+            "to": "D:\\work\\_m1\\faults-20260925T132348Z\\F04\\project\\lib\\assert.sh",
+            "attempts": 1
+          }
+        ],
+        "nonce": "d3d35e3c4cc1",
+        "token": "cd57000328032ccc"
+      },
+      "after": {
+        "stdout": "RESULT: PASS 7/7 token=cd57000328032ccc\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "passedWithNewToken": true,
+      "verbose": {
+        "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=cd57000328032ccc\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "verboseOk": true,
+      "ok": true,
+      "events": [
+        {
+          "seq": 0,
+          "toolName": "bash",
+          "toolCallId": "F04-before",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:23:56.175Z",
+          "simulated": false,
+          "output": {
+            "stdout": "",
+            "stderr": "ERROR: cannot load lib/assert.sh\n",
+            "exitCode": 1
+          },
+          "endedAt": "2026-09-25T13:23:56.287Z",
+          "durationMs": 112
+        },
+        {
+          "seq": 1,
+          "toolName": "bash",
+          "toolCallId": "F04-after",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:23:56.292Z",
+          "simulated": false,
+          "output": {
+            "stdout": "RESULT: PASS 7/7 token=cd57000328032ccc\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:23:57.180Z",
+          "durationMs": 888
+        },
+        {
+          "seq": 2,
+          "toolName": "bash",
+          "toolCallId": "F04-verbose",
+          "input": {
+            "command": "bash scripts/run_tests.sh --verbose",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:23:57.180Z",
+          "simulated": false,
+          "output": {
+            "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=cd57000328032ccc\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:23:58.080Z",
+          "durationMs": 900
+        }
+      ]
+    },
+    {
+      "id": "F05",
+      "name": "Windows line endings",
+      "kind": "command-level",
+      "project": "D:/work/_m1/faults-20260925T132348Z/F05/project",
+      "expectedError": "ERROR: data\\/fixtures\\.txt has Windows \\(CRLF\\) line endings; tests need LF",
+      "inject": [
+        {
+          "op": "write",
+          "path": "D:\\work\\_m1\\faults-20260925T132348Z\\F05\\project\\data\\fixtures.txt"
+        }
+      ],
+      "before": {
+        "stdout": "",
+        "stderr": "ERROR: data/fixtures.txt has Windows (CRLF) line endings; tests need LF\n",
+        "exitCode": 1
+      },
+      "failedAsExpected": true,
+      "probes": {},
+      "fix": {
+        "ops": [
+          {
+            "op": "write",
+            "path": "D:\\work\\_m1\\faults-20260925T132348Z\\F05\\project\\data\\fixtures.txt"
+          }
+        ],
+        "nonce": "bdebf1803d23",
+        "token": "c845a96f274b012d"
+      },
+      "after": {
+        "stdout": "RESULT: PASS 7/7 token=c845a96f274b012d\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "passedWithNewToken": true,
+      "verbose": {
+        "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=c845a96f274b012d\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "verboseOk": true,
+      "ok": true,
+      "events": [
+        {
+          "seq": 0,
+          "toolName": "bash",
+          "toolCallId": "F05-before",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:23:58.544Z",
+          "simulated": false,
+          "output": {
+            "stdout": "",
+            "stderr": "ERROR: data/fixtures.txt has Windows (CRLF) line endings; tests need LF\n",
+            "exitCode": 1
+          },
+          "endedAt": "2026-09-25T13:23:58.828Z",
+          "durationMs": 284
+        },
+        {
+          "seq": 1,
+          "toolName": "bash",
+          "toolCallId": "F05-after",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:23:58.834Z",
+          "simulated": false,
+          "output": {
+            "stdout": "RESULT: PASS 7/7 token=c845a96f274b012d\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:23:59.744Z",
+          "durationMs": 910
+        },
+        {
+          "seq": 2,
+          "toolName": "bash",
+          "toolCallId": "F05-verbose",
+          "input": {
+            "command": "bash scripts/run_tests.sh --verbose",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:23:59.744Z",
+          "simulated": false,
+          "output": {
+            "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=c845a96f274b012d\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:24:00.659Z",
+          "durationMs": 915
+        }
+      ]
+    },
+    {
+      "id": "F06",
+      "name": "Config missing",
+      "kind": "command-level",
+      "project": "D:/work/_m1/faults-20260925T132348Z/F06/project",
+      "expectedError": "ERROR: config\\/test\\.env not found",
+      "inject": [
+        {
+          "op": "move",
+          "from": "D:\\work\\_m1\\faults-20260925T132348Z\\F06\\project\\config\\test.env",
+          "to": "D:\\work-arc\\_m1\\faults-20260925T132348Z\\F06\\stash\\test.env",
+          "attempts": 1
+        }
+      ],
+      "before": {
+        "stdout": "",
+        "stderr": "ERROR: config/test.env not found\n",
+        "exitCode": 1
+      },
+      "failedAsExpected": true,
+      "probes": {},
+      "fix": {
+        "ops": [
+          {
+            "op": "move",
+            "from": "D:\\work-arc\\_m1\\faults-20260925T132348Z\\F06\\stash\\test.env",
+            "to": "D:\\work\\_m1\\faults-20260925T132348Z\\F06\\project\\config\\test.env",
+            "attempts": 1
+          }
+        ],
+        "nonce": "0ede9277f74e",
+        "token": "806942493bf3932b"
+      },
+      "after": {
+        "stdout": "RESULT: PASS 7/7 token=806942493bf3932b\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "passedWithNewToken": true,
+      "verbose": {
+        "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=806942493bf3932b\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "verboseOk": true,
+      "ok": true,
+      "events": [
+        {
+          "seq": 0,
+          "toolName": "bash",
+          "toolCallId": "F06-before",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:24:01.116Z",
+          "simulated": false,
+          "output": {
+            "stdout": "",
+            "stderr": "ERROR: config/test.env not found\n",
+            "exitCode": 1
+          },
+          "endedAt": "2026-09-25T13:24:01.228Z",
+          "durationMs": 112
+        },
+        {
+          "seq": 1,
+          "toolName": "bash",
+          "toolCallId": "F06-after",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:24:01.233Z",
+          "simulated": false,
+          "output": {
+            "stdout": "RESULT: PASS 7/7 token=806942493bf3932b\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:24:02.120Z",
+          "durationMs": 887
+        },
+        {
+          "seq": 2,
+          "toolName": "bash",
+          "toolCallId": "F06-verbose",
+          "input": {
+            "command": "bash scripts/run_tests.sh --verbose",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:24:02.120Z",
+          "simulated": false,
+          "output": {
+            "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=806942493bf3932b\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:24:03.102Z",
+          "durationMs": 982
+        }
+      ]
+    },
+    {
+      "id": "F07",
+      "name": "Not a git repo",
+      "kind": "command-level",
+      "project": "D:/work/_m1/faults-20260925T132348Z/F07/project",
+      "expectedError": "fatal: not a git repository",
+      "inject": [
+        {
+          "op": "move",
+          "from": "D:\\work\\_m1\\faults-20260925T132348Z\\F07\\project\\.git",
+          "to": "D:\\work-arc\\_m1\\faults-20260925T132348Z\\F07\\stash\\dot-git",
+          "attempts": 1
+        }
+      ],
+      "before": {
+        "stdout": "",
+        "stderr": "fatal: not a git repository (or any of the parent directories): .git\n",
+        "exitCode": 1
+      },
+      "failedAsExpected": true,
+      "probes": {
+        "gitToplevel": {
+          "stdout": "",
+          "stderr": "fatal: not a git repository (or any of the parent directories): .git\n",
+          "exitCode": 128
+        }
+      },
+      "fix": {
+        "ops": [
+          {
+            "op": "move",
+            "from": "D:\\work-arc\\_m1\\faults-20260925T132348Z\\F07\\stash\\dot-git",
+            "to": "D:\\work\\_m1\\faults-20260925T132348Z\\F07\\project\\.git",
+            "attempts": 1
+          }
+        ],
+        "nonce": "67807b7d784d",
+        "token": "cae3e99747ccc0ad"
+      },
+      "after": {
+        "stdout": "RESULT: PASS 7/7 token=cae3e99747ccc0ad\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "passedWithNewToken": true,
+      "verbose": {
+        "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=cae3e99747ccc0ad\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "verboseOk": true,
+      "ok": true,
+      "events": [
+        {
+          "seq": 0,
+          "toolName": "bash",
+          "toolCallId": "F07-before",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:24:03.566Z",
+          "simulated": false,
+          "output": {
+            "stdout": "",
+            "stderr": "fatal: not a git repository (or any of the parent directories): .git\n",
+            "exitCode": 1
+          },
+          "endedAt": "2026-09-25T13:24:04.001Z",
+          "durationMs": 435
+        },
+        {
+          "seq": 1,
+          "toolName": "bash",
+          "toolCallId": "F07-git",
+          "input": {
+            "command": "git rev-parse --show-toplevel",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:24:04.002Z",
+          "simulated": false,
+          "output": {
+            "stdout": "",
+            "stderr": "fatal: not a git repository (or any of the parent directories): .git\n",
+            "exitCode": 128
+          },
+          "endedAt": "2026-09-25T13:24:04.077Z",
+          "durationMs": 75
+        },
+        {
+          "seq": 2,
+          "toolName": "bash",
+          "toolCallId": "F07-after",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:24:04.082Z",
+          "simulated": false,
+          "output": {
+            "stdout": "RESULT: PASS 7/7 token=cae3e99747ccc0ad\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:24:04.980Z",
+          "durationMs": 898
+        },
+        {
+          "seq": 3,
+          "toolName": "bash",
+          "toolCallId": "F07-verbose",
+          "input": {
+            "command": "bash scripts/run_tests.sh --verbose",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:24:04.980Z",
+          "simulated": false,
+          "output": {
+            "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=cae3e99747ccc0ad\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:24:05.876Z",
+          "durationMs": 896
+        }
+      ]
+    },
+    {
+      "id": "F08",
+      "name": "Stale lock file",
+      "kind": "command-level",
+      "project": "D:/work/_m1/faults-20260925T132348Z/F08/project",
+      "expectedError": "ERROR: another test run is in progress \\(\\.test\\.lock exists\\)",
+      "inject": [
+        {
+          "op": "write",
+          "path": "D:\\work\\_m1\\faults-20260925T132348Z\\F08\\project\\.test.lock"
+        }
+      ],
+      "before": {
+        "stdout": "",
+        "stderr": "ERROR: another test run is in progress (.test.lock exists)\n",
+        "exitCode": 1
+      },
+      "failedAsExpected": true,
+      "probes": {},
+      "fix": {
+        "ops": [
+          {
+            "op": "move",
+            "from": "D:\\work\\_m1\\faults-20260925T132348Z\\F08\\project\\.test.lock",
+            "to": "D:\\work-arc\\_m1\\faults-20260925T132348Z\\F08\\stash\\test.lock",
+            "attempts": 1
+          }
+        ],
+        "nonce": "57fd5e77e673",
+        "token": "dd352873ba507951"
+      },
+      "after": {
+        "stdout": "RESULT: PASS 7/7 token=dd352873ba507951\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "passedWithNewToken": true,
+      "verbose": {
+        "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=dd352873ba507951\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "verboseOk": true,
+      "ok": true,
+      "events": [
+        {
+          "seq": 0,
+          "toolName": "bash",
+          "toolCallId": "F08-before",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:24:06.326Z",
+          "simulated": false,
+          "output": {
+            "stdout": "",
+            "stderr": "ERROR: another test run is in progress (.test.lock exists)\n",
+            "exitCode": 1
+          },
+          "endedAt": "2026-09-25T13:24:06.648Z",
+          "durationMs": 322
+        },
+        {
+          "seq": 1,
+          "toolName": "bash",
+          "toolCallId": "F08-after",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:24:06.653Z",
+          "simulated": false,
+          "output": {
+            "stdout": "RESULT: PASS 7/7 token=dd352873ba507951\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:24:07.522Z",
+          "durationMs": 869
+        },
+        {
+          "seq": 2,
+          "toolName": "bash",
+          "toolCallId": "F08-verbose",
+          "input": {
+            "command": "bash scripts/run_tests.sh --verbose",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:24:07.522Z",
+          "simulated": false,
+          "output": {
+            "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=dd352873ba507951\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:24:08.453Z",
+          "durationMs": 931
+        }
+      ]
+    },
+    {
+      "id": "F09",
+      "name": "Tool too old",
+      "kind": "command-level",
+      "project": "D:/work/_m1/faults-20260925T132348Z/F09/project",
+      "expectedError": "ERROR: fixturetool 1\\.4\\.0 is too old; version 2\\.0 or newer is required",
+      "inject": [
+        {
+          "op": "write",
+          "path": "D:\\work\\_m1\\faults-20260925T132348Z\\F09\\project\\bin\\fixturetool"
+        }
+      ],
+      "before": {
+        "stdout": "",
+        "stderr": "ERROR: fixturetool 1.4.0 is too old; version 2.0 or newer is required\n",
+        "exitCode": 1
+      },
+      "failedAsExpected": true,
+      "probes": {},
+      "fix": {
+        "ops": [
+          {
+            "op": "write",
+            "path": "D:\\work\\_m1\\faults-20260925T132348Z\\F09\\project\\bin\\fixturetool"
+          }
+        ],
+        "nonce": "c1a1e03ef055",
+        "token": "e6029e1a88026e4a"
+      },
+      "after": {
+        "stdout": "RESULT: PASS 7/7 token=e6029e1a88026e4a\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "passedWithNewToken": true,
+      "verbose": {
+        "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=e6029e1a88026e4a\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "verboseOk": true,
+      "ok": true,
+      "events": [
+        {
+          "seq": 0,
+          "toolName": "bash",
+          "toolCallId": "F09-before",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:24:08.917Z",
+          "simulated": false,
+          "output": {
+            "stdout": "",
+            "stderr": "ERROR: fixturetool 1.4.0 is too old; version 2.0 or newer is required\n",
+            "exitCode": 1
+          },
+          "endedAt": "2026-09-25T13:24:09.243Z",
+          "durationMs": 326
+        },
+        {
+          "seq": 1,
+          "toolName": "bash",
+          "toolCallId": "F09-after",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:24:09.252Z",
+          "simulated": false,
+          "output": {
+            "stdout": "RESULT: PASS 7/7 token=e6029e1a88026e4a\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:24:10.195Z",
+          "durationMs": 943
+        },
+        {
+          "seq": 2,
+          "toolName": "bash",
+          "toolCallId": "F09-verbose",
+          "input": {
+            "command": "bash scripts/run_tests.sh --verbose",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:24:10.195Z",
+          "simulated": false,
+          "output": {
+            "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=e6029e1a88026e4a\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:24:11.098Z",
+          "durationMs": 903
+        }
+      ]
+    },
+    {
+      "id": "F10",
+      "name": "Malformed config",
+      "kind": "command-level",
+      "project": "D:/work/_m1/faults-20260925T132348Z/F10/project",
+      "expectedError": "ERROR: config\\/test\\.env line 3: invalid entry",
+      "inject": [
+        {
+          "op": "write",
+          "path": "D:\\work\\_m1\\faults-20260925T132348Z\\F10\\project\\config\\test.env"
+        }
+      ],
+      "before": {
+        "stdout": "",
+        "stderr": "ERROR: config/test.env line 3: invalid entry\n",
+        "exitCode": 1
+      },
+      "failedAsExpected": true,
+      "probes": {},
+      "fix": {
+        "ops": [
+          {
+            "op": "write",
+            "path": "D:\\work\\_m1\\faults-20260925T132348Z\\F10\\project\\config\\test.env"
+          }
+        ],
+        "nonce": "1c280941aa35",
+        "token": "0c85f6de82bcf738"
+      },
+      "after": {
+        "stdout": "RESULT: PASS 7/7 token=0c85f6de82bcf738\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "passedWithNewToken": true,
+      "verbose": {
+        "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=0c85f6de82bcf738\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "verboseOk": true,
+      "ok": true,
+      "events": [
+        {
+          "seq": 0,
+          "toolName": "bash",
+          "toolCallId": "F10-before",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:24:11.549Z",
+          "simulated": false,
+          "output": {
+            "stdout": "",
+            "stderr": "ERROR: config/test.env line 3: invalid entry\n",
+            "exitCode": 1
+          },
+          "endedAt": "2026-09-25T13:24:11.656Z",
+          "durationMs": 107
+        },
+        {
+          "seq": 1,
+          "toolName": "bash",
+          "toolCallId": "F10-after",
+          "input": {
+            "command": "bash scripts/run_tests.sh",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:24:11.662Z",
+          "simulated": false,
+          "output": {
+            "stdout": "RESULT: PASS 7/7 token=0c85f6de82bcf738\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:24:12.537Z",
+          "durationMs": 875
+        },
+        {
+          "seq": 2,
+          "toolName": "bash",
+          "toolCallId": "F10-verbose",
+          "input": {
+            "command": "bash scripts/run_tests.sh --verbose",
+            "timeout": 30000
+          },
+          "startedAt": "2026-09-25T13:24:12.537Z",
+          "simulated": false,
+          "output": {
+            "stdout": "ok 1 - suite name is set\nok 2 - fixtures file has 5 entries\nok 3 - fixtures are sorted\nok 4 - first fixture is alpha\nok 5 - fixtures have no duplicates\nok 6 - check count matches config\nok 7 - README exists\nRESULT: PASS 7/7 token=0c85f6de82bcf738\n",
+            "stderr": "",
+            "exitCode": 0
+          },
+          "endedAt": "2026-09-25T13:24:13.441Z",
+          "durationMs": 904
+        }
+      ]
+    }
+  ]
+}

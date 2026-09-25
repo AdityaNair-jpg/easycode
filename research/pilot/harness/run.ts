@@ -14,7 +14,7 @@ import { FAULT_IDS, isFaultId, type FaultId } from "./faults.ts";
 import { createFixture, newNonce } from "./fixture.ts";
 import { sha256, systemPrompts } from "./history.ts";
 import { nextIds } from "./ids.ts";
-import { RUNS_DIR, WS_DIR, assertRunFromRepoRoot, repoRel } from "./paths.ts";
+import { DEFAULT_ROOTS, RUNS_DIR, assertRunFromRepoRoot, repoRel, type Roots } from "./paths.ts";
 import { readDotenv } from "./secrets.ts";
 import { prepareShell } from "./shell-env.ts";
 import { listRecordFiles, readRecord, recordPath, runDir, writeJsonOnce, writeRecord } from "./store.ts";
@@ -44,7 +44,7 @@ export type RunOptions = {
   controlsPerType: number;
   budgetUsd: number;
   concurrencyPerProvider: number;
-  wsRoot?: string;
+  roots?: Roots;
   runsRoot?: string;
   timeoutMs?: number;
   // Tests pass fakes; real runs resolve easycode's models
@@ -66,7 +66,7 @@ export async function preflight(models: string[]): Promise<Record<string, unknow
     .filter((k) => !process.env[k]);
   if (missingKeys.length) throw new Error(`No API key loaded for: ${missingKeys.join(", ")} (names only; check the repo-root .env)`);
   // The grep tool spawns grep from this process's PATH (deviation D4)
-  const probe = join(WS_DIR, "_preflight", `${Date.now()}`, "project");
+  const probe = join(DEFAULT_ROOTS.arc, "_preflight", `${Date.now()}`, "project");
   createFixture(probe, newNonce());
   const grep = await callTool(instrumentedTools(probe, { disableBash: false }, []), "grep", { pattern: "^alpha$", path: "data" });
   if (!Array.isArray(grep?.matches) || grep.matches.length !== 1) {
@@ -92,11 +92,11 @@ export function spentSoFar(runsRoot = RUNS_DIR): number {
   return total;
 }
 
-export function plan(opts: RunOptions, wsRoot: string): PlanItem[] {
+export function plan(opts: RunOptions, roots: Roots): PlanItem[] {
   const trialCount = opts.models.length * opts.faults.length * opts.reps;
   const controlCount = opts.models.length * opts.controlsPerType * 2;
-  const tIds = nextIds(wsRoot, "t", trialCount);
-  const kIds = nextIds(wsRoot, "k", controlCount);
+  const tIds = nextIds(roots, "t", trialCount);
+  const kIds = nextIds(roots, "k", controlCount);
   const items: PlanItem[] = [];
   const controls: PlanItem[] = [];
   for (const model of opts.models) {
@@ -120,14 +120,15 @@ async function pool<T>(items: T[], size: number, work: (item: T) => Promise<void
   }));
 }
 
-function templateHashes(wsRoot: string) {
-  const p = systemPrompts(join(wsRoot, "<CWD>"));
-  const strip = (s: string) => s.split(join(wsRoot, "<CWD>")).join("<CWD>");
-  return { pFullTemplateSha256: sha256(strip(p.pFull)), pNoRuleTemplateSha256: sha256(strip(p.pNoRule)) };
+// Hashes of the two prompts with the literal "<CWD>" as the project folder;
+// each record holds the exact hashes for its own cwd
+function templateHashes() {
+  const p = systemPrompts("<CWD>");
+  return { pFullTemplateSha256: p.pFullSha256, pNoRuleTemplateSha256: p.pNoRuleSha256 };
 }
 
 export async function executeRun(opts: RunOptions) {
-  const wsRoot = opts.wsRoot ?? WS_DIR;
+  const roots = opts.roots ?? DEFAULT_ROOTS;
   const runsRoot = opts.runsRoot ?? RUNS_DIR;
   if (existsSync(runDir(opts.runId, runsRoot))) throw new Error(`Run ${opts.runId} already exists; a new run needs a new run_id`);
   const checks = opts.skipPreflight ? { skipped: true } : await preflight(opts.models);
@@ -137,13 +138,13 @@ export async function executeRun(opts: RunOptions) {
   const spent = spentSoFar(runsRoot);
   const ctx: RunContext = {
     runId: opts.runId,
-    wsRoot,
+    roots,
     budget: new Budget(opts.budgetUsd, spent),
     versions: { easycodeCommit: env.code.easycodeCommitRunAgainst, harnessCommit: env.code.harnessCommit, harnessDirty: env.code.harnessDirty },
     stop: { requested: false },
     timeoutMs: opts.timeoutMs,
   };
-  const items = plan(opts, wsRoot);
+  const items = plan(opts, roots);
   const subjects = new Map(opts.models.map((m) => [m, subjectFor(m)]));
   writeJsonOnce(join(runDir(opts.runId, runsRoot), "manifest.json"), jsonSafe({
     runId: opts.runId,
@@ -160,6 +161,8 @@ export async function executeRun(opts: RunOptions) {
       turnTimeoutMs: opts.timeoutMs ?? TURN_TIMEOUT_MS,
       maxRetries: MAX_RETRIES,
       spentBeforeRunUsd: spent,
+      workRoot: roots.work,
+      arcRoot: roots.arc,
     },
     environment: env,
     preflight: checks,
@@ -167,7 +170,7 @@ export async function executeRun(opts: RunOptions) {
       const s = subjects.get(m)!;
       return { requestedId: m, provider: s.model.provider, providerOptions: s.model.providerOptions ?? null };
     }),
-    prompts: templateHashes(wsRoot),
+    prompts: templateHashes(),
     deviations: DEVIATIONS,
     plan: items,
   }));
@@ -196,9 +199,9 @@ export async function executeRun(opts: RunOptions) {
 }
 
 // The one logged pass that re-runs infra errors only (brief, rule 5)
-export async function executeInfraRetryPass(runId: string, opts: { runsRoot?: string; wsRoot?: string; subjectFor?: (m: string) => Subject; skipPreflight?: boolean; timeoutMs?: number } = {}) {
+export async function executeInfraRetryPass(runId: string, opts: { runsRoot?: string; roots?: Roots; subjectFor?: (m: string) => Subject; skipPreflight?: boolean; timeoutMs?: number } = {}) {
   const runsRoot = opts.runsRoot ?? RUNS_DIR;
-  const wsRoot = opts.wsRoot ?? WS_DIR;
+  const roots = opts.roots ?? DEFAULT_ROOTS;
   const passFile = join(runDir(runId, runsRoot), "retry1.json");
   if (existsSync(passFile)) throw new Error(`The infra-error pass already ran for ${runId}`);
   const manifest = await Bun.file(join(runDir(runId, runsRoot), "manifest.json")).json();
@@ -209,7 +212,7 @@ export async function executeInfraRetryPass(runId: string, opts: { runsRoot?: st
   const spent = spentSoFar(runsRoot);
   const ctx: RunContext = {
     runId,
-    wsRoot,
+    roots,
     budget: new Budget(manifest.settings.budgetUsd, spent),
     versions: { easycodeCommit: env.code.easycodeCommitRunAgainst, harnessCommit: env.code.harnessCommit, harnessDirty: env.code.harnessDirty },
     stop: { requested: false },
@@ -219,8 +222,8 @@ export async function executeInfraRetryPass(runId: string, opts: { runsRoot?: st
   const failedTurn1 = records.filter((r) => r.kind === "trial" && r.runtimeValidity.state === "INFRA_ERROR") as TrialRecord[];
   const failedBranches = records.filter((r) => r.kind === "trial" && r.runtimeValidity.state === "VALID" && r.branches.some((b: any) => b.state === "INFRA_ERROR")) as TrialRecord[];
   const failedControls = records.filter((r) => r.kind === "control" && (r.error || r.turn?.outcome === "INFRA_ERROR"));
-  const newT = nextIds(wsRoot, "t", failedTurn1.length);
-  const newK = nextIds(wsRoot, "k", failedControls.length);
+  const newT = nextIds(roots, "t", failedTurn1.length);
+  const newK = nextIds(roots, "k", failedControls.length);
   const passPlan = {
     runId,
     pass: "retry1",

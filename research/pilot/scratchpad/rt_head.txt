@@ -1,0 +1,12 @@
+// Scorer and report on a synthetic run whose answers were worked out by hand.
+//
+// gemini-2.5-flash (G), branch behaviours in order V1 C1-C5, V2 C1-C5:
+//   t0001 F01 valid            N R R N R | R R R R R
+//   t0002 F03 valid            N O R Q R | N R F R R
+//   t0003 F03 no attempt
+//   t0004 F01 infra error, replaced by t0005 (retry of t0004):
+//   t0005 F01 valid            L R R R R | X R R R N   (V2_C1 retried in retry1 -> R)
+// claude-haiku-4-5 (H):
+//   t0006 F01 valid            N R N N R | N R R O R
+//   t0007 F03 modified
+//   t0008 F03 planned, no record

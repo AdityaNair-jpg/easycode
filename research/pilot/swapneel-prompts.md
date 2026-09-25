@@ -27,3 +27,27 @@ it and `sed` restored them. One copied line had `fullStream` where chat.ts has `
 fixed. A float assertion was loosened to 12 decimals. My hand-worked synthetic cost counted 38 turns
 instead of 37; fixed before the test ran. One scratch file went to `/tmp` by mistake; it was left in
 place (rule 10).
+
+### Prompt 2 — 2026-09-25
+where are we now? whats the status?
+
+**TL;DR:** Reported the Checkpoint 1 status. No files changed.
+
+### Prompt 3 — 2026-09-25
+please commit and push to remote
+
+**TL;DR:** Checked; everything was already committed and pushed (`ec34a29` local and remote). No files changed.
+
+### Prompt 4 — 2026-09-25
+The human's Checkpoint 1 answers and changes A and B, quoted in full in `research/pilot/PREREGISTRATION.md`.
+
+**TL;DR:** Changed the primary metric to "re-ran the script", with the old definition kept as "rechecked" (A). Moved the workspaces to D:\work and D:\work-arc (B). Recorded the pre-registration confirmation, re-ran the tests, fault validation, fake trials and smoke test, then ran Milestone 2.
+
+**Files changed:**
+- `research/pilot/harness/{paths,shell-env,ids,trial,run,classify,score,report,render,deviations,fake-trial,validate-faults,smoke-tools}.ts` — changes A and B.
+- `research/pilot/tests/{helpers,classify,trial,run,faults,report,synthetic}` — new tests for A and B; synthetic answers recomputed by hand.
+- `research/pilot/PREREGISTRATION.md`, `NOTEBOOK.md`, `REPLICATION.md`, `LEDGER.md` — the confirmation, the log entries, and the layout.
+
+**Key decisions:** Categories no longer depend on the fault (S2 revised). Controls use the same retry and rechecked definitions. Test scratch moved under the git ceiling.
+
+**Errors encountered:** A fake-trial layout check was too strict for F02, whose work folder is empty at the end of a trial. I fixed the check and re-ran; NOTEBOOK A10 has the details. A sed edit split a REPLICATION table; I fixed it.

@@ -2,15 +2,14 @@
 // Two changes, both made to the object resolveShell() caches, without
 // touching packages/:
 //   1. secret variables removed (secrets.ts, brief rule 14)
-//   2. GIT_CEILING_DIRECTORIES set to the workspace root. The workspaces live
-//      inside the easycode repo, so without a ceiling a git command in a
-//      project with no .git (fault F07) reaches the easycode repo and shows
-//      this study's branch to the model. See NOTEBOOK.md, deviation D2.
-import { WS_DIR } from "./paths.ts";
+//   2. GIT_CEILING_DIRECTORIES set to the work root, so a git command in a
+//      project with no .git (fault F07) can't find a repository above the
+//      trial folder. See NOTEBOOK.md, deviation D2.
+import { DEFAULT_ROOTS } from "./paths.ts";
 import { scrubShellEnv } from "./secrets.ts";
 import type { Shell } from "./easycode.ts";
 
-export const GIT_CEILING = WS_DIR;
+export const GIT_CEILING = DEFAULT_ROOTS.work;
 
 let prepared: { shell: Shell; removed: string[]; gitCeiling: string } | null = null;
 

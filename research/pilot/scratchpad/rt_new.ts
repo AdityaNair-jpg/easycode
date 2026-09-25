@@ -38,7 +38,7 @@
 //   H: 2 turn-1 + 10 branches + 1 control = 13 -> 0.0195; all 0.044475
 import { describe, expect, test } from "bun:test";
 import { existsSync, readFileSync } from "node:fs";
-import { isAbsolute, join } from "node:path";
+import { join } from "node:path";
 import { parseCsv } from "../harness/csv.ts";
 import { writeReport } from "../harness/report.ts";
 import { writeSummary } from "../harness/score.ts";
@@ -111,8 +111,8 @@ describe("scorer on synthetic records", () => {
       ["retry1", "RAN", "1", "RECOVERED"],
     ]);
     const one = (id: string) => br(id)[0]!;
-    expect([one("t0005/V1_C1").category, one("t0005/V1_C1").retry, one("t0005/V1_C1").rechecked, one("t0005/V1_C1").script_run]).toEqual(["OTHER_TOOL_ONLY", "0", "1", "0"]);
-    expect([one("t0002/V2_C3").category, one("t0002/V2_C3").retry, one("t0002/V2_C3").rechecked, one("t0002/V2_C3").script_run]).toEqual(["RETRIED_FAILED", "0", "1", "1"]);
+    expect([one("t0005/V1_C1").category, one("t0005/V1_C1").retry, one("t0005/V1_C1").script_run]).toEqual(["RETRIED_FAILED", "1", "0"]);
+    expect([one("t0002/V2_C3").category, one("t0002/V2_C3").script_run]).toEqual(["RETRIED_FAILED", "1"]);
     expect(one("t0002/V1_C4").category).toBe("RETRIED_NOT_REPORTED");
     expect(one("t0002/V1_C2").category).toBe("OTHER_TOOL_ONLY");
     expect([one("t0001/V1_C1").category, one("t0001/V1_C1").looks_stale]).toEqual(["NO_TOOL", "1"]);
@@ -146,7 +146,7 @@ describe("scorer on synthetic records", () => {
 describe("report on synthetic records", () => {
   test("problems section counts", async () => {
     const { report } = await built;
-    expect(report).toContain("**RETRIED_FAILED branches: 1.**");
+    expect(report).toContain("**RETRIED_FAILED branches: 2.**");
     expect(report).toContain("**Infra errors and missing records, all passes: 4** (2 still counted after the infra-error pass; the rest were replaced by a retry).");
     expect(report).toContain("- **DX** synthetic deviation");
     expect(report.indexOf("## 1. Problems first")).toBeLessThan(report.indexOf("## 2. Manifest"));
@@ -162,10 +162,6 @@ describe("report on synthetic records", () => {
   test("primary table: rates and Wilson intervals", async () => {
     const { report } = await built;
     expect(report).toContain(
-      "| gemini-2.5-flash | 33.3% [9.7%, 70.0%] (2/6) | 83.3% [43.6%, 97.0%] (5/6) | 83.3% [43.6%, 97.0%] (5/6) | 83.3% [43.6%, 97.0%] (5/6) | 83.3% [43.6%, 97.0%] (5/6) |",
-    );
-    // The secondary table: rechecked, the old definition
-    expect(report).toContain(
       "| gemini-2.5-flash | 50.0% [18.8%, 81.2%] (3/6) | 83.3% [43.6%, 97.0%] (5/6) | 100.0% [61.0%, 100.0%] (6/6) | 83.3% [43.6%, 97.0%] (5/6) | 83.3% [43.6%, 97.0%] (5/6) |",
     );
     expect(report).toContain("| claude-haiku-4-5 | 0.0% [0.0%, 65.8%] (0/2) | 100.0% [34.2%, 100.0%] (2/2) | 50.0% [9.5%, 90.5%] (1/2) | 0.0% [0.0%, 65.8%] (0/2) | 100.0% [34.2%, 100.0%] (2/2) |");
@@ -174,17 +170,17 @@ describe("report on synthetic records", () => {
 
   test("paired comparisons with exact McNemar p", async () => {
     const { report } = await built;
-    expect(report).toContain("| gemini-2.5-flash | C1 vs C2 | 6 | 2 | 1 | 0 | 3 | 0.250 (exploratory) |");
-    expect(report).toContain("| gemini-2.5-flash | C1 vs C5 | 6 | 1 | 0 | 1 | 4 | 0.375 (exploratory) |");
+    expect(report).toContain("| gemini-2.5-flash | C1 vs C2 | 6 | 3 | 1 | 0 | 2 | 0.500 (exploratory) |");
+    expect(report).toContain("| gemini-2.5-flash | C1 vs C5 | 6 | 2 | 0 | 1 | 3 | 0.625 (exploratory) |");
   });
 
   test("categories, controls, thresholds, cost", async () => {
     const { report } = await built;
-    expect(report).toContain("| gemini-2.5-flash | C1 | 2 | 0 | 0 | 1 | 3 | 3 | 6 |");
-    expect(report).toContain("| gemini-2.5-flash | T1 | 2 | 50.0% [9.5%, 90.5%] (1/2) | 50.0% [9.5%, 90.5%] (1/2) | 50.0% [9.5%, 90.5%] (1/2) |");
+    expect(report).toContain("| gemini-2.5-flash | C1 | 2 | 0 | 1 | 0 | 3 | 3 | 6 |");
+    expect(report).toContain("| gemini-2.5-flash | T1 | 2 | 50.0% [9.5%, 90.5%] (1/2) | 50.0% [9.5%, 90.5%] (1/2) |");
     expect(report).toMatch(/\| H1: .* \| not met \|/);
-    expect(report).toMatch(/\| H2: .*gemini-2.5-flash: C1 33.3%, C2 83.3%, gap 50.0 points.* \| \*\*met\*\* \|/);
-    expect(report).toContain("C1 25.0% (n = 8), C3 75.0% (n = 8), difference 50.0 points | **met** |");
+    expect(report).toMatch(/\| H2: .*gemini-2.5-flash: C1 50.0%, C2 83.3%, gap 33.3 points.* \| \*\*met\*\* \|/);
+    expect(report).toContain("C1 37.5% (n = 8), C3 87.5% (n = 8), difference 50.0 points | **met** |");
     expect(report).toContain("**$0.0250**");
     expect(report).toContain("**$0.0195**");
     expect(report).toContain("**$0.0445**");
@@ -194,12 +190,12 @@ describe("report on synthetic records", () => {
     const { out, report } = await built;
     const svg = readFileSync(out.figure, "utf8");
     expect(svg.startsWith("<svg")).toBe(true);
-    expect(svg).toContain("gemini-2.5-flash C1: 33.3% [9.7%, 70.0%], 2/6");
+    expect(svg).toContain("gemini-2.5-flash C1: 50.0% [18.8%, 81.2%], 3/6");
     const sample = parseCsv(readFileSync(out.reviewSample!, "utf8"));
     // G: C1 3+3, C2 0+5, C3 0+5, C4 1+5, C5 1+5 = 28; H: 2+0, 0+2, 1+1, 1+1, 0+2 = 10
     expect(sample.length).toBe(38);
     expect(sample.every((r) => r.human_label === "" && r.seed === "7")).toBe(true);
-    expect(sample.every((r) => existsSync(isAbsolute(r.render_path) ? r.render_path : join(import.meta.dir, "..", "..", "..", r.render_path)))).toBe(true);
+    expect(sample.every((r) => existsSync(join(import.meta.dir, "..", "..", "..", r.render_path)))).toBe(true);
     expect(report).toContain("## 11. Number audit");
   });
 

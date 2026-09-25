@@ -63,3 +63,15 @@ study to `research/pilot/`, so the ledger lives here and indexes this folder onl
 | 2026-09-25 | Checked how ai 6 adapts v2 providers' usage | Gemini thinking tokens sit outside outputTokens; NOTEBOOK A3 |
 | 2026-09-25 | Grep smoke test under two PATHs | NOTEBOOK A1, question Q1 |
 | 2026-09-25 | Probed git under F07 | NOTEBOOK A2, deviation D2 |
+
+### Added 2026-09-25, after Checkpoint 1 (changes A and B)
+
+| Path | Type | Status | Purpose / contents | Date | Origin |
+|---|---|---|---|---|---|
+| PREREGISTRATION.md | prereg | current, confirmed 2026-09-25 | Section 10 verbatim, change-A definitions, the human's message quoted | 2026-09-25 | Prompt 4 |
+| evidence/cp1-changes/test_results_20260925T132051Z.{txt,junit.xml} | evidence | current | 100 tests, 0 failures, after A and B | 2026-09-25 | Prompt 4 |
+| evidence/cp1-changes/fault_validation_20260925T132348Z.{json,md} | evidence | current | 10/10 faults at D:\work, ceiling D:\work | 2026-09-25 | Prompt 4 |
+| evidence/cp1-changes/fake_trials_20260925T132415Z.json, fake_trial_x0003/x0004 | evidence | superseded by 132504Z | first run; over-strict layout check (NOTEBOOK A10) | 2026-09-25 | Prompt 4 |
+| evidence/cp1-changes/fake_trials_20260925T132504Z.json, fake_trial_x0005/x0006, condition_examples_x0006_* | evidence | current | 10/10 branches each, longest path 91, only project\ in work folders | 2026-09-25 | Prompt 4 |
+| evidence/cp1-changes/smoke_gitbash-launch_20260925T132437Z.json | evidence | current | 7/7 tools at the new roots | 2026-09-25 | Prompt 4 |
+| D:\work, D:\work-arc | workspaces (outside the repo) | current | trial workspaces and archives, never deleted | 2026-09-25 | Prompt 4 |

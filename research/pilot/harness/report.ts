@@ -125,8 +125,8 @@ export async function writeReport(runId: string, opts: { runsRoot?: string; resu
   // 1. Problems
   lines.push("## 1. Problems first", "");
   const retriedFailed = eff.filter((r) => r.category === "RETRIED_FAILED");
-  lines.push(`**RETRIED_FAILED branches: ${retriedFailed.length}.** The brief reads these as a sign of a harness bug; \`script_run\` = 0 means the retry was a bash call that never ran the script (possible for F01 and F02).`, "");
-  if (retriedFailed.length) lines.push(...table(["model", "trial", "branch", "fault", "script_run", "render"], retriedFailed.map((r) => [r.model_requested, r.trial_id, r.branch, r.fault, r.script_run, renderOf(r.source)])), "");
+  lines.push(`**RETRIED_FAILED branches: ${retriedFailed.length}.** A bash command named \`run_tests.sh\` but no tool result held the new token. The brief reads a failed run as a sign of a harness bug; a command that only reads the script (for example \`cat\`) also lands here, so check the command.`, "");
+  if (retriedFailed.length) lines.push(...table(["model", "trial", "branch", "fault", "run_tests.sh commands", "render"], retriedFailed.map((r) => [r.model_requested, r.trial_id, r.branch, r.fault, `\`${r.script_commands.replace(/\|/g, "\\|")}\``, renderOf(r.source)])), "");
   const infra = rows.filter((r) => ["INFRA_ERROR", "MISSING_RECORD", "PROVIDER_REJECTED"].includes(r.state));
   lines.push(`**Infra errors and missing records, all passes: ${infra.length}** (${infra.filter((r) => yes(r.effective)).length} still counted after the infra-error pass; the rest were replaced by a retry).`, "");
   if (infra.length) lines.push(...table(["unit", "id", "model", "state", "reason", "pass", "still counted"], infra.map((r) => [r.unit, r.id, r.model_requested, r.state, r.state_reason, r.pass || "original", yes(r.effective) ? "yes" : "no"])), "");
@@ -214,14 +214,24 @@ export async function writeReport(runId: string, opts: { runsRoot?: string; resu
   audit.push({ section: "3. Accounting", numbers: "all counts", how: `count of effective rows by unit, model, fault and state in ${summaryRel}` });
 
   // 4. Primary table
-  lines.push("## 4. Primary table: retry rate", "", "Share of turn-2 branches that re-attempted the failed operation (Section 5.1 definition), with 95% Wilson intervals. Only branches that ran count.", "");
+  lines.push(
+    "## 4. Primary table: retry rate",
+    "",
+    "**Retry** (the human's change A, confirmed with the pre-registration on 2026-09-25): the model re-ran the script, meaning a turn-2 bash command contains `run_tests.sh` and a turn-2 tool result holds the new token. Share of turn-2 branches that ran, with 95% Wilson intervals.",
+    "",
+  );
   lines.push(...table(["model", ...CONDITIONS.map((c) => `${c} ${CONDITION_NAMES[c]}`)], models.map((m) => [m, ...CONDITIONS.map((c) => { const w = rate(byCond(byModel(ran, m), c)); return `${ciText(w)} (${w.k}/${w.n})`; })])), "");
   lines.push("Split by variant:", "");
   const splitRows: (string | number)[][] = [];
   for (const m of models) for (const v of ["V1", "V2"]) splitRows.push([m, v, ...CONDITIONS.map((c) => { const w = rate(byCond(byModel(ran, m), c).filter((r) => r.variant === v)); return `${ciText(w)} (${w.k}/${w.n})`; })]);
   lines.push(...table(["model", "variant", ...CONDITIONS], splitRows), "");
   lines.push("The V1 and V2 branches of a trial share one turn 1, so they are not independent. The pooled intervals treat them as independent and are therefore too narrow.", "");
-  audit.push({ section: "4. Primary table", numbers: "k, n, rate, Wilson bounds", how: `harness/stats.ts wilson() over effective RAN branch rows of ${summaryRel}, column retry, grouped by model and condition (and variant)` });
+  lines.push(
+    "Secondary metric, **rechecked**: the brief's original definition applied in turn 2 (any bash call for F01 and F02; a bash command containing `run_tests.sh` for the other faults). A branch can be rechecked without being a retry, for example `cat scripts/run_tests.sh`.",
+    "",
+  );
+  lines.push(...table(["model", ...CONDITIONS], models.map((m) => [m, ...CONDITIONS.map((c) => { const w = rate(byCond(byModel(ran, m), c), "rechecked"); return `${ciText(w)} (${w.k}/${w.n})`; })])), "");
+  audit.push({ section: "4. Primary table", numbers: "k, n, rate, Wilson bounds", how: `harness/stats.ts wilson() over effective RAN branch rows of ${summaryRel}, column retry (secondary table: column rechecked), grouped by model and condition (and variant)` });
 
   // 5. Paired comparisons
   lines.push("## 5. Paired comparisons (exploratory)", "", "Pairs are the two branches of one trial and variant under C1 and under the other condition, both run. b = only C1 retried; c = only the other condition retried. Every p-value is an exact McNemar test (two-sided binomial on b + c) and is **exploratory**.", "");
@@ -249,14 +259,19 @@ export async function writeReport(runId: string, opts: { runsRoot?: string; resu
   audit.push({ section: "6. Per-fault C1", numbers: "k, n, rate, Wilson bounds", how: `wilson() over effective RAN C1 branch rows of ${summaryRel} by model and fault` });
 
   // 7. Controls
-  lines.push("## 7. Controls (no fault, no history)", "", "Retry-equivalent: a bash call that ran `run_tests.sh`. Recovered-equivalent: that, plus the fixture's token in a tool result and in the final text.", "");
+  lines.push(
+    "## 7. Controls (no fault, no history)",
+    "",
+    "Same definitions as the branches, with the fixture's own token. Rechecked-equivalent: a bash command containing `run_tests.sh`. Retry-equivalent: that, plus the token in a tool result. Recovered-equivalent: that, plus the token in the final text.",
+    "",
+  );
   const ctrlOk = controls.filter((r) => r.state === "OK");
-  lines.push(...table(["model", "control", "ran", "retry-equivalent", "recovered-equivalent"], models.flatMap((m) => ["T1", "V2"].map((t) => {
+  lines.push(...table(["model", "control", "ran", "rechecked-equivalent", "retry-equivalent", "recovered-equivalent"], models.flatMap((m) => ["T1", "V2"].map((t) => {
     const rs = byModel(ctrlOk, m).filter((r) => r.control_type === t);
-    const a = rate(rs, "retry"), rc = rate(rs, "recovered");
-    return [m, t, rs.length, `${ciText(a)} (${a.k}/${a.n})`, `${ciText(rc)} (${rc.k}/${rc.n})`];
+    const rk = rate(rs, "rechecked"), a = rate(rs, "retry"), rc = rate(rs, "recovered");
+    return [m, t, rs.length, `${ciText(rk)} (${rk.k}/${rk.n})`, `${ciText(a)} (${a.k}/${a.n})`, `${ciText(rc)} (${rc.k}/${rc.n})`];
   }))), "");
-  audit.push({ section: "7. Controls", numbers: "counts, rates, Wilson bounds", how: `wilson() over effective control rows with state OK in ${summaryRel}, columns retry and recovered` });
+  audit.push({ section: "7. Controls", numbers: "counts, rates, Wilson bounds", how: `wilson() over effective control rows with state OK in ${summaryRel}, columns rechecked, retry and recovered` });
 
   // 8. Categories
   lines.push("## 8. Outcome categories", "", "`looks_stale` is a text heuristic on NO_TOOL branches for human review only; it feeds no headline number.", "");
@@ -295,7 +310,7 @@ export async function writeReport(runId: string, opts: { runsRoot?: string; resu
     ["H2: some model's C1 and C2 retry rates differ by >= 10 points", h2.map((x) => `${x.m}: C1 ${pct(x.a.p)}, C2 ${pct(x.b.p)}, gap ${Number.isNaN(x.d) ? "n/a" : `${(x.d * 100).toFixed(1)} points`}`).join("; "), met(h2.some((x) => x.met))],
     ["H3: pooled over models, C3 retry rate exceeds C1 by >= 10 points", `C1 ${pct(h3a.p)} (n = ${h3a.n}), C3 ${pct(h3b.p)} (n = ${h3b.n}), difference ${Number.isNaN(h3d) ? "n/a" : `${(h3d * 100).toFixed(1)} points`}`, met(!Number.isNaN(h3d) && h3d >= 0.1)],
   ]), "");
-  lines.push("For H1, \"valid paired branches\" is read as C1 branches that ran, each paired by design with its sibling branches from the same turn 1.", "");
+  lines.push("\"Retry rate\" here is the change-A metric (re-ran the script), as the human confirmed the pre-registration on 2026-09-25. For H1, \"valid paired branches\" is read as C1 branches that ran, each paired by design with its sibling branches from the same turn 1.", "");
   audit.push({ section: "10. Thresholds", numbers: "rates, stale rates, gaps", how: `wilson() point estimates over effective RAN branch rows of ${summaryRel}` });
 
   // Figure

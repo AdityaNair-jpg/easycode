@@ -26,7 +26,7 @@ function options(label: string, over: Partial<RunOptions> = {}): RunOptions {
     controlsPerType: 1,
     budgetUsd: 1,
     concurrencyPerProvider: 4,
-    wsRoot: join(root, "ws"),
+    roots: { work: join(root, "work"), arc: join(root, "arc") },
     runsRoot: join(root, "runs"),
     subjectFor: fakeSubject(obedientAgent),
     skipPreflight: true,
@@ -37,7 +37,7 @@ function options(label: string, over: Partial<RunOptions> = {}): RunOptions {
 describe("planning", () => {
   test("rep by rep across faults, controls after rep 1, ids unique", () => {
     const o = options("plan", { faults: ["F01", "F02"], reps: 2, controlsPerType: 1, models: ["gemini-2.5-flash", "claude-haiku-4-5"] });
-    const items = plan(o, o.wsRoot!);
+    const items = plan(o, o.roots!);
     expect(items.map((i) => (i.kind === "trial" ? `${i.id}:${i.model[0]}${i.fault}r${i.rep}` : `${i.id}:${i.model[0]}${i.type}`))).toEqual([
       "t0001:gF01r1", "t0002:cF01r1", "t0003:gF02r1", "t0004:cF02r1",
       "k0001:gT1", "k0002:gV2", "k0003:cT1", "k0004:cV2",
@@ -86,11 +86,11 @@ describe("executeRun with a fake model", () => {
     await executeRun(o);
     const first = listRecordFiles(o.runId, o.runsRoot!).map((f) => readRecord(f));
     expect(first.map((r) => r.runtimeValidity.state)).toEqual(["INFRA_ERROR"]);
-    const pass = await executeInfraRetryPass(o.runId, { runsRoot: o.runsRoot, wsRoot: o.wsRoot, subjectFor: fakeSubject(obedientAgent), skipPreflight: true });
+    const pass = await executeInfraRetryPass(o.runId, { runsRoot: o.runsRoot, roots: o.roots, subjectFor: fakeSubject(obedientAgent), skipPreflight: true });
     expect(pass.passPlan.turn1).toEqual([{ retryOf: "t0001", newId: "t0002" }]);
     const after = listRecordFiles(o.runId, o.runsRoot!).map((f) => readRecord(f));
     const retry = after.find((r) => r.trialId === "t0002")!;
     expect([retry.retryOf, retry.pass, retry.runtimeValidity.state]).toEqual(["t0001", "retry1", "VALID"]);
-    await expect(executeInfraRetryPass(o.runId, { runsRoot: o.runsRoot, wsRoot: o.wsRoot, skipPreflight: true })).rejects.toThrow("already ran");
+    await expect(executeInfraRetryPass(o.runId, { runsRoot: o.runsRoot, roots: o.roots, skipPreflight: true })).rejects.toThrow("already ran");
   }, 120_000);
 });

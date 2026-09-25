@@ -80,3 +80,42 @@ The PowerShell launch used for the fresh-PATH smoke test (and the last preflight
 - `8f987e3` Add the fixture, the ten faults, and tool and fault validation
 - `f48f43b` Add the trial runner, C1-C5 history builders, and fake-model trials
 - later commits: see `git log research/stage1-pilot`
+
+## 2026-09-25: Checkpoint 1 answers, changes A and B
+
+The human replied in writing (quoted in full in `PREREGISTRATION.md`):
+- Q1 grep: approved. Launch from Git Bash, recorded as D4.
+- D1 (derived token) and D2 (git ceiling): approved.
+- Milestone 2 controls: 10 of each type.
+- Change A: `retry` = re-ran the script (a run_tests.sh bash command AND the new token in a tool
+  result); the old definition kept as `rechecked`. Recorded as D12; S2 revised.
+- Change B: workspaces moved to `D:\work\<trial_id>\project`; snapshot, stash, archives and log under
+  `D:\work-arc\<trial_id>\`; the roots are a recorded setting (`settings.workRoot`, `settings.arcRoot`
+  in each manifest; env `PILOT_WORK_ROOT`, `PILOT_ARC_ROOT`); D2's ceiling now at `D:\work`. Recorded
+  as D11; D5 superseded. This also removes anomaly A7 (the cwd no longer names the study) and A8
+  (no archives beside `project\`).
+- Pre-registration confirmed 2026-09-25, with "retry rate" meaning the change-A metric.
+
+What changed in code: `paths.ts` (roots, layout), `shell-env.ts` (ceiling), `ids.ts` (ids unique
+across both roots and the old `ws/`), `trial.ts`, `run.ts`, `classify.ts` (retry, rechecked,
+categories), `score.ts` (`rechecked`, `script_commands` columns; controls on the same
+definitions), `report.ts` (primary and secondary tables, controls, RETRIED_FAILED shows commands),
+`render.ts`, `deviations.ts`, the three Milestone 1 scripts (evidence-folder argument), and tests.
+Test scratch moved to `D:\work\_tests` and `D:\work-arc\_tests`, under the git ceiling.
+
+Re-validation after A and B (evidence in `evidence/cp1-changes/`):
+
+| Command | Result | Evidence |
+|---|---|---|
+| `bun test research/pilot/tests --reporter=junit ...` | 100 tests, 0 failures | `test_results_20260925T132051Z.junit.xml` and `test_results_20260925T132051Z.txt` (summary: 100 pass) |
+| `bun research/pilot/harness/validate-faults.ts cp1-changes` | 10/10 faults ok; ceiling `D:\work`; F07 probe gets `fatal: not a git repository` | `fault_validation_20260925T132348Z.{json,md}` |
+| `bun research/pilot/harness/fake-trial.ts cp1-changes` (first) | x0003 (F02), x0004 (F01): 10/10 branches each, longest path 91; the "only project\" check reported **false** | `fake_trials_20260925T132415Z.json` |
+| same, after fixing the check | x0005 (F02), x0006 (F01): 10/10 each, longest path 91, nothing but `project\` in either work folder | `fake_trials_20260925T132504Z.json`, `condition_examples_x0006_20260925T132504Z.md` |
+| `bun research/pilot/harness/smoke-tools.ts gitbash-launch cp1-changes` | 7/7 tools ok at the new roots | `smoke_gitbash-launch_20260925T132437Z.json` |
+
+- **A10, a bug in my own check, not in the layout.** The first fake-trial run reported that a work
+  folder held more than `project\`. It didn't: `D:\work\x0003` (fault F02) was empty, because an F02
+  trial ends restored to its turn-1 state, when the project folder is missing. The check demanded
+  exactly `["project"]` instead of "nothing but project". I fixed the check (entries must all be
+  `project`) and re-ran both fake trials; x0003 and x0004 stay on disk and in the evidence as the
+  first run.

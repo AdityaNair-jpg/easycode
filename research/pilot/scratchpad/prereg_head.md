@@ -54,23 +54,3 @@ Its wording is unchanged. The definitions block above it says what its terms mea
 
 ---
 
-## 10. Pre-registration (the human confirms before Milestone 3)
-
-These thresholds decide whether Stage 2 is worth doing. They are not claims for a paper. The pilot is too small for confident statistical claims.
-
-A **stale rate** is 1 minus the retry rate.
-
-- **H1, the phenomenon exists:** in C1, at least one model has a stale rate of 20% or more, over at least 40 valid paired branches.
-- **H2, narration differs from raw evidence:** for at least one model, the C1 and C2 retry rates differ by 10 percentage points or more. The direction is not predicted.
-- **H3, the attestation helps:** pooled across models, the C3 retry rate exceeds C1 by 10 percentage points or more.
-
-How the human plans to read the outcome:
-
-| Result | Reading |
-|---|---|
-| H1 fails | Stop, or rethink the question. |
-| H1 holds, H2 fails | The phenomenon is real, but the narration-versus-evidence angle is weak. Reframe before Stage 2. |
-| H1 and H2 hold | Proceed to Stage 2. |
-
-In every case, the human reads the transcripts before deciding.
-

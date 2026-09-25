@@ -1,0 +1,136 @@
+{
+  "summary": [
+    {
+      "trialId": "x0003",
+      "fault": "F02",
+      "turn1": "VALID",
+      "branches": [
+        "V1_C1:RAN",
+        "V1_C2:RAN",
+        "V1_C3:RAN",
+        "V1_C4:RAN",
+        "V1_C5:RAN",
+        "V2_C1:RAN",
+        "V2_C2:RAN",
+        "V2_C3:RAN",
+        "V2_C4:RAN",
+        "V2_C5:RAN"
+      ],
+      "archives": [
+        [
+          "D:/work-arc/x0003/arc/V1_C1",
+          "D:/work-arc/x0003/arc-stash/V1_C1"
+        ],
+        [
+          "D:/work-arc/x0003/arc/V1_C2",
+          "D:/work-arc/x0003/arc-stash/V1_C2"
+        ],
+        [
+          "D:/work-arc/x0003/arc/V1_C3",
+          "D:/work-arc/x0003/arc-stash/V1_C3"
+        ],
+        [
+          "D:/work-arc/x0003/arc/V1_C4",
+          "D:/work-arc/x0003/arc-stash/V1_C4"
+        ],
+        [
+          "D:/work-arc/x0003/arc/V1_C5",
+          "D:/work-arc/x0003/arc-stash/V1_C5"
+        ],
+        [
+          "D:/work-arc/x0003/arc/V2_C1",
+          "D:/work-arc/x0003/arc-stash/V2_C1"
+        ],
+        [
+          "D:/work-arc/x0003/arc/V2_C2",
+          "D:/work-arc/x0003/arc-stash/V2_C2"
+        ],
+        [
+          "D:/work-arc/x0003/arc/V2_C3",
+          "D:/work-arc/x0003/arc-stash/V2_C3"
+        ],
+        [
+          "D:/work-arc/x0003/arc/V2_C4",
+          "D:/work-arc/x0003/arc-stash/V2_C4"
+        ],
+        [
+          "D:/work-arc/x0003/arc/V2_C5",
+          "D:/work-arc/x0003/arc-stash/V2_C5"
+        ]
+      ],
+      "workDirEntries": [],
+      "pathCount": 880,
+      "longestPath": "D:\\work-arc\\x0003\\snap\\stash\\project\\.git\\objects\\15\\3fc21368cecd7200c22c114e23b23605012895",
+      "longestPathLength": 91,
+      "under200": true,
+      "record": "research/pilot/evidence/cp1-changes/fake_trial_x0003_F02_20260925T132415Z.json.gz"
+    },
+    {
+      "trialId": "x0004",
+      "fault": "F01",
+      "turn1": "VALID",
+      "branches": [
+        "V1_C1:RAN",
+        "V1_C2:RAN",
+        "V1_C3:RAN",
+        "V1_C4:RAN",
+        "V1_C5:RAN",
+        "V2_C1:RAN",
+        "V2_C2:RAN",
+        "V2_C3:RAN",
+        "V2_C4:RAN",
+        "V2_C5:RAN"
+      ],
+      "archives": [
+        [
+          "D:/work-arc/x0004/arc/V1_C1",
+          "D:/work-arc/x0004/arc-stash/V1_C1"
+        ],
+        [
+          "D:/work-arc/x0004/arc/V1_C2",
+          "D:/work-arc/x0004/arc-stash/V1_C2"
+        ],
+        [
+          "D:/work-arc/x0004/arc/V1_C3",
+          "D:/work-arc/x0004/arc-stash/V1_C3"
+        ],
+        [
+          "D:/work-arc/x0004/arc/V1_C4",
+          "D:/work-arc/x0004/arc-stash/V1_C4"
+        ],
+        [
+          "D:/work-arc/x0004/arc/V1_C5",
+          "D:/work-arc/x0004/arc-stash/V1_C5"
+        ],
+        [
+          "D:/work-arc/x0004/arc/V2_C1",
+          "D:/work-arc/x0004/arc-stash/V2_C1"
+        ],
+        [
+          "D:/work-arc/x0004/arc/V2_C2",
+          "D:/work-arc/x0004/arc-stash/V2_C2"
+        ],
+        [
+          "D:/work-arc/x0004/arc/V2_C3",
+          "D:/work-arc/x0004/arc-stash/V2_C3"
+        ],
+        [
+          "D:/work-arc/x0004/arc/V2_C4",
+          "D:/work-arc/x0004/arc-stash/V2_C4"
+        ],
+        [
+          "D:/work-arc/x0004/arc/V2_C5",
+          "D:/work-arc/x0004/arc-stash/V2_C5"
+        ]
+      ],
+      "workDirEntries": [
+        "project"
+      ],
+      "pathCount": 880,
+      "longestPath": "D:\\work-arc\\x0004\\snap\\project\\.git\\objects\\15\\3fc21368cecd7200c22c114e23b23605012895",
+      "longestPathLength": 85,
+      "under200": true,
+      "record": "research/pilot/evidence/cp1-changes/fake_trial_x0004_F01_20260925T132415Z.json.gz"
+    }
+  ]
+}

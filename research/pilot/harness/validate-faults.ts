@@ -2,13 +2,13 @@
 // run the test command through the real bash tool and check the expected
 // error; fix, run again and check the PASS line carries the new token.
 // No model calls. Usage, from the repo root:
-//   bun research/pilot/harness/validate-faults.ts
+//   bun research/pilot/harness/validate-faults.ts [evidence-folder]
 import { join } from "node:path";
 import { createFixture, newNonce, tokenFor } from "./fixture.ts";
 import { FAULTS, FAULT_IDS, applyFix, type FaultId } from "./faults.ts";
 import { captureEnvironment } from "./environment.ts";
 import { stamp, writeEvidence } from "./evidence.ts";
-import { WS_DIR, assertRunFromRepoRoot, repoRel, trialPaths } from "./paths.ts";
+import { DEFAULT_ROOTS, assertRunFromRepoRoot, repoRel, trialPaths, type Roots } from "./paths.ts";
 import { prepareShell } from "./shell-env.ts";
 import { callTool, instrumentedTools, type ToolEvent } from "./tools.ts";
 import { mkdirSync } from "node:fs";
@@ -19,9 +19,9 @@ function errorText(result: any): string {
   return typeof result?.error === "string" ? result.error : String(result?.stderr ?? "");
 }
 
-export async function validateFault(wsRoot: string, id: FaultId) {
+export async function validateFault(roots: Roots, id: FaultId) {
   const fault = FAULTS[id];
-  const paths = trialPaths(wsRoot, id);
+  const paths = trialPaths(roots, id);
   const nonce0 = newNonce();
   createFixture(paths.project, nonce0);
   mkdirSync(paths.stash, { recursive: true });
@@ -93,17 +93,18 @@ function summary(results: Awaited<ReturnType<typeof validateFault>>[]): string {
 if (import.meta.main) {
   assertRunFromRepoRoot();
   const shellPrep = prepareShell();
+  const set = process.argv[2] ?? "m1";
   const at = stamp();
-  const wsRoot = join(WS_DIR, "_m1", `faults-${at}`);
+  const roots = { work: join(DEFAULT_ROOTS.work, "_m1", `faults-${at}`), arc: join(DEFAULT_ROOTS.arc, "_m1", `faults-${at}`) };
   const results = [];
-  for (const id of FAULT_IDS) results.push(await validateFault(wsRoot, id));
+  for (const id of FAULT_IDS) results.push(await validateFault(roots, id));
   const allOk = results.every((r) => r.ok);
   const json = writeEvidence(
-    "m1",
+    set,
     `fault_validation_${at}.json`,
     JSON.stringify({ environment: captureEnvironment(), gitCeiling: shellPrep.gitCeiling, allOk, results }, null, 2),
   );
-  const md = writeEvidence("m1", `fault_validation_${at}.md`, summary(results));
+  const md = writeEvidence(set, `fault_validation_${at}.md`, summary(results));
   for (const r of results) console.log(`${r.ok ? "ok  " : "FAIL"} ${r.id} ${r.name}`);
   console.log(`evidence: ${repoRel(json)}\n          ${repoRel(md)}`);
   process.exit(allOk ? 0 : 1);

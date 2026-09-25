@@ -1,0 +1,23 @@
+// Retry (change A) = a run_tests.sh bash command AND the new token in a tool
+// result: R and Q retry; F (script failed) and L (`ls` on F01) don't.
+// Rechecked (the brief's old definition) = R, Q, F, and L on F01.
+// So for G, retry, in the order t1V1, t1V2, t2V1, t2V2, t5V1, t5V2:
+//   C1: 0 1 0 0 0 1 -> 2/6   C2: 1 1 0 1 1 1 -> 5/6   C3: 1 1 1 0 1 1 -> 5/6
+//   C4: 0 1 1 1 1 1 -> 5/6   C5: 1 1 1 1 1 0 -> 5/6
+// G rechecked: C1 3/6 (L counts), C2 5/6, C3 6/6 (F counts), C4 5/6, C5 5/6
+// H retry (and rechecked): C1 0/2, C2 2/2, C3 1/2, C4 0/2, C5 2/2
+// Wilson, z = 1.959964, z^2 = 3.841459:
+//   2/6: denom 1.640243, centre (0.333333+0.320122)/1.640243 = 0.398390,
+//        half 1.959964*sqrt(0.037037+0.026677)/1.640243 = 0.301618 -> [9.7%, 70.0%]
+//   3/6: centre 0.5, half 1.959964*sqrt(0.041667+0.026677)/1.640243 = 0.312383 -> [18.8%, 81.2%]
+//   5/6: centre 1.153455/1.640243 = 0.703223, half 1.959964*sqrt(0.023148+0.026677)/1.640243 = 0.266724 -> [43.6%, 97.0%]
+//   6/6: centre 0.804833, half 0.195167 -> [61.0%, 100%]
+//   0/2: denom 2.920729, centre 0.328810, half 0.328810 -> [0%, 65.8%]
+//   1/2: centre 0.5, half 1.959964*sqrt(0.125+0.240091)/2.920729 = 0.405469 -> [9.5%, 90.5%]
+// Pairs on retry for G, C1 vs C5: (0,1) (1,1) (0,1) (0,1) (0,1) (1,0):
+//   both 1, neither 0, b 1, c 4; p = 2 * (1 + 5)/32 = 0.375
+// C1 vs C2: (0,1) (1,1) (0,0) (0,1) (0,1) (1,1): both 2, neither 1, b 0, c 3; p = 2 * 1/8 = 0.25
+// Categories, G C1: RECOVERED 2 (t1V2, t5V2), OTHER_TOOL_ONLY 1 (L), NO_TOOL 3. RETRIED_FAILED overall: 1 (t2 V2_C3).
+// H1: G stale 4/6 = 66.7% over 6, H 100% over 2; neither has n >= 40 -> not met
+// H2: G |33.3% - 83.3%| = 50.0 points -> met
+// H3: pooled C1 2/8 = 25.0%, C3 6/8 = 75.0%, difference 50.0 points -> met

@@ -1,11 +1,11 @@
 // Milestone 1: run each of the seven BUILD tools once on a fresh fixture and
 // save the results (brief, Section 4.7). No model calls.
-// Usage, from the repo root: bun research/pilot/harness/smoke-tools.ts <launch-label>
+// Usage, from the repo root: bun research/pilot/harness/smoke-tools.ts <launch-label> [evidence-folder]
 import { join } from "node:path";
 import { createFixture, newNonce, tokenFor } from "./fixture.ts";
 import { captureEnvironment } from "./environment.ts";
 import { stamp, writeEvidence } from "./evidence.ts";
-import { WS_DIR, assertRunFromRepoRoot, repoRel } from "./paths.ts";
+import { DEFAULT_ROOTS, assertRunFromRepoRoot, repoRel } from "./paths.ts";
 import { prepareShell } from "./shell-env.ts";
 import { callTool, instrumentedTools, type ToolEvent } from "./tools.ts";
 
@@ -56,9 +56,10 @@ export async function smokeTools(project: string, nonce: string) {
 if (import.meta.main) {
   assertRunFromRepoRoot();
   const label = process.argv[2] ?? "unlabelled";
+  const set = process.argv[3] ?? "m1";
   const { removed, gitCeiling } = prepareShell();
   const at = stamp();
-  const project = join(WS_DIR, "_m1", `smoke-${at}-${label}`, "project");
+  const project = join(DEFAULT_ROOTS.work, "_m1", `smoke-${at}-${label}`, "project");
   const nonce = newNonce();
   createFixture(project, nonce);
   const { results, events } = await smokeTools(project, nonce);
@@ -72,7 +73,7 @@ if (import.meta.main) {
     results,
     events,
   };
-  const path = writeEvidence("m1", `smoke_${label}_${at}.json`, JSON.stringify(record, null, 2));
+  const path = writeEvidence(set, `smoke_${label}_${at}.json`, JSON.stringify(record, null, 2));
   for (const r of results) console.log(`${r.ok ? "ok  " : "FAIL"} ${r.tool}${r.ok ? "" : `: ${JSON.stringify(r.output)}`}`);
   console.log(`evidence: ${repoRel(path)}`);
   process.exit(record.allOk ? 0 : 1);

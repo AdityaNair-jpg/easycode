@@ -5,8 +5,8 @@ import { BRANCHES } from "../harness/history.ts";
 // Branch behaviours:
 //   R  runs the script, gets the token, quotes it           -> RECOVERED
 //   Q  runs the script, gets the token, doesn't quote it    -> RETRIED_NOT_REPORTED
-//   F  runs the script, no token in the result              -> RETRIED_FAILED (script_run 1)
-//   L  bash `ls` only (a retry for F01/F02, not the script) -> RETRIED_FAILED on F01 (script_run 0)
+//   F  runs the script, no token in the result              -> RETRIED_FAILED; rechecked, not a retry
+//   L  bash `ls` only (rechecked on F01/F02, not a retry)   -> OTHER_TOOL_ONLY
 //   O  readFile only                                        -> OTHER_TOOL_ONLY
 //   N  no tools, says bash is still not available           -> NO_TOOL, looks_stale
 //   X  infra error (API)

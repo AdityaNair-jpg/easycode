@@ -12,7 +12,7 @@ import { fingerprint } from "./fingerprint.ts";
 import { InfraError, safeCopy, safeMove, type CopyRecord, type MoveRecord } from "./fsutil.ts";
 import { BRANCHES, T1, VARIANTS, systemPrompts, turn1Messages, turn2, type Condition, type SystemPrompts, type Variant } from "./history.ts";
 import { turn1Validity, type Turn1State } from "./classify.ts";
-import { repoRel, trialPaths, type TrialPaths } from "./paths.ts";
+import { repoRel, trialPaths, type Roots, type TrialPaths } from "./paths.ts";
 import { jsonSafe, runTurn, type ModelHandle, type TurnRecord } from "./turn.ts";
 
 export type Versions = { easycodeCommit: string; harnessCommit: string; harnessDirty: boolean };
@@ -20,7 +20,7 @@ export type Versions = { easycodeCommit: string; harnessCommit: string; harnessD
 // Shared by every trial in a run
 export type RunContext = {
   runId: string;
-  wsRoot: string;
+  roots: Roots;
   budget: Budget;
   versions: Versions;
   // Set when the run must stop: provider rejection or budget
@@ -59,6 +59,7 @@ export type TrialRecord = {
   fault: FaultId;
   rep: number;
   versions: Versions;
+  roots: Roots;
   cwd: string;
   projectRel: string;
   nonce0: string;
@@ -75,9 +76,8 @@ export type TrialRecord = {
   error?: string;
 };
 
-function logEvent(wsRoot: string, id: string, event: Record<string, unknown>): void {
-  // Outside the trial folder, so `ls ..` from the project doesn't show it
-  const path = join(wsRoot, "_logs", `${id}.jsonl`);
+// Under the archive root, so nothing sits next to project\
+function logEvent(path: string, event: Record<string, unknown>): void {
   mkdirSync(dirname(path), { recursive: true });
   appendFileSync(path, JSON.stringify({ at: new Date().toISOString(), ...event }) + "\n");
 }
@@ -126,7 +126,7 @@ async function runBranch(x: BranchInputs, branch: (typeof BRANCHES)[number], arc
   const faultPaths = { project: x.paths.project, stash: x.paths.stash };
   try {
     b.fix = await applyFix(FAULTS[x.fault], faultPaths);
-    logEvent(x.ctx.wsRoot, x.trialId, { event: "fix", branch: archiveName, nonce: b.fix.nonce });
+    logEvent(x.paths.log, { event: "fix", branch: archiveName, nonce: b.fix.nonce });
     let note: string | undefined;
     if (branch.condition === "C3" || branch.condition === "C5") {
       const built = await buildNote();
@@ -177,7 +177,7 @@ async function runBranch(x: BranchInputs, branch: (typeof BRANCHES)[number], arc
     b.error = `${b.error ? `${b.error}; ` : ""}archive/restore: ${errText(err)}`;
     throw Object.assign(new InfraError("WORKSPACE_UNRESTORED", errText(err)), { branch: b });
   }
-  logEvent(x.ctx.wsRoot, x.trialId, { event: "branch", branch: archiveName, state: b.state, reason: b.reason });
+  logEvent(x.paths.log, { event: "branch", branch: archiveName, state: b.state, reason: b.reason });
   return b;
 }
 
@@ -185,7 +185,7 @@ export type TrialSpec = { trialId: string; fault: FaultId; rep: number; subject:
 
 export async function runTrial(ctx: RunContext, spec: TrialSpec): Promise<TrialRecord> {
   const started = Date.now();
-  const paths = trialPaths(ctx.wsRoot, spec.trialId);
+  const paths = trialPaths(ctx.roots, spec.trialId);
   const fault = FAULTS[spec.fault];
   const nonce0 = newNonce();
   const record: TrialRecord = {
@@ -200,6 +200,7 @@ export async function runTrial(ctx: RunContext, spec: TrialSpec): Promise<TrialR
     fault: spec.fault,
     rep: spec.rep,
     versions: ctx.versions,
+    roots: ctx.roots,
     cwd: paths.project,
     projectRel: repoRel(paths.project),
     nonce0,
@@ -222,7 +223,7 @@ export async function runTrial(ctx: RunContext, spec: TrialSpec): Promise<TrialR
     }
     createFixture(paths.project, nonce0);
     mkdirSync(paths.stash, { recursive: true });
-    logEvent(ctx.wsRoot, spec.trialId, { event: "fixture", fault: spec.fault, nonce: nonce0 });
+    logEvent(paths.log, { event: "fixture", fault: spec.fault, nonce: nonce0 });
     record.inject = await fault.inject({ project: paths.project, stash: paths.stash });
 
     try {
@@ -251,7 +252,7 @@ export async function runTrial(ctx: RunContext, spec: TrialSpec): Promise<TrialR
       ctx.stop.detail = `in ${spec.trialId} turn1`;
     }
     record.runtimeValidity = turn1Validity(spec.fault, record.turn1);
-    logEvent(ctx.wsRoot, spec.trialId, { event: "turn1", state: record.runtimeValidity.state });
+    logEvent(paths.log, { event: "turn1", state: record.runtimeValidity.state });
     if (record.runtimeValidity.state !== "VALID") return record;
 
     record.snapshot = await snapshot(paths);
@@ -292,7 +293,7 @@ export async function runTrial(ctx: RunContext, spec: TrialSpec): Promise<TrialR
 // Infra-error pass for a valid trial: re-runs only the branches that ended
 // in INFRA_ERROR, from the snapshot still at the canonical path
 export async function retryBranches(ctx: RunContext, original: TrialRecord, subject: Subject, pass: string) {
-  const paths = trialPaths(ctx.wsRoot, original.trialId);
+  const paths = trialPaths(ctx.roots, original.trialId);
   const started = Date.now();
   const out = {
     kind: "branch-retry" as const,
@@ -347,7 +348,7 @@ export async function runControl(
   spec: { controlId: string; type: ControlType; subject: Subject; retryOf?: string; pass?: string | null },
 ) {
   const started = Date.now();
-  const paths = trialPaths(ctx.wsRoot, spec.controlId);
+  const paths = trialPaths(ctx.roots, spec.controlId);
   const nonce0 = newNonce();
   const record = {
     kind: "control" as const,
@@ -360,6 +361,7 @@ export async function runControl(
     modelRequested: spec.subject.model.requestedId,
     provider: spec.subject.model.provider,
     versions: ctx.versions,
+    roots: ctx.roots,
     cwd: paths.project,
     projectRel: repoRel(paths.project),
     nonce0,

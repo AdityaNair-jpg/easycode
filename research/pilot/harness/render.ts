@@ -89,7 +89,7 @@ export function renderTrial(rec: any): string {
       `- State: ${b.state}${b.reason ? ` (${b.reason})` : ""}${b.error ? `: ${b.error}` : ""}`,
       ...(b.fix ? [`- Fix applied, new token \`${b.fix.token}\``] : []),
       ...(m
-        ? [`- Scorer: retry ${m.retry}, recovered ${m.recovered}, category **${m.category}**${m.looksStale ? ", looks_stale" : ""}${m.flags.dotdot ? ", FLAG `..`" : ""}${m.flags.stash ? ", FLAG `_stash`" : ""}`]
+        ? [`- Scorer: retry ${m.retry}, rechecked ${m.rechecked}, recovered ${m.recovered}, category **${m.category}**${m.looksStale ? ", looks_stale" : ""}${m.flags.dotdot ? ", FLAG `..`" : ""}${m.flags.stash ? ", FLAG `_stash`" : ""}`]
         : []),
       "",
       ...renderTurn(b.turn, rec.prompts, "### Turn 2").slice(1),

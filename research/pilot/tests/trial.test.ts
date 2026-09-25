@@ -14,14 +14,14 @@ import { turn2Metrics } from "../harness/classify.ts";
 import { trialPaths } from "../harness/paths.ts";
 import { prepareShell } from "../harness/shell-env.ts";
 import { retryBranches, runControl, runTrial, type RunContext } from "../harness/trial.ts";
-import { testDir } from "./helpers.ts";
+import { testRoots } from "./helpers.ts";
 
 prepareShell();
 
 function context(label: string, budget = new Budget(100), timeoutMs?: number): RunContext {
   return {
     runId: `test-${label}`,
-    wsRoot: testDir(label),
+    roots: testRoots(label),
     budget,
     versions: { easycodeCommit: "test", harnessCommit: "test", harnessDirty: true },
     stop: { requested: false },
@@ -64,7 +64,7 @@ describe("a valid trial with a well-behaved fake model", () => {
       const m = turn2Metrics("F03", b.turn!, b.fix!.token);
       expect([b.id, m.category]).toEqual([b.id, "RECOVERED"]);
       tokens.add(b.fix!.token);
-      const p = trialPaths(ctx.wsRoot, "t0001");
+      const p = trialPaths(ctx.roots, "t0001");
       // The archived workspace holds that branch's nonce
       expect(readNonce(p.arc(b.id))).toBe(b.fix!.nonce);
     }
@@ -72,7 +72,7 @@ describe("a valid trial with a well-behaved fake model", () => {
     expect(tokens.has(r.token0)).toBe(false);
 
     // Canonical path is back at the turn-1 snapshot, stash included
-    const p = trialPaths(ctx.wsRoot, "t0001");
+    const p = trialPaths(ctx.roots, "t0001");
     expect(fingerprint(p.project).sha256).toBe(fingerprint(p.snapProject).sha256);
     expect(fingerprint(p.stash).sha256).toBe(fingerprint(p.snapStash).sha256);
     expect(existsSync(join(p.snapStash, "run_tests.sh"))).toBe(true);
@@ -207,7 +207,7 @@ describe("budget guard", () => {
 describe("infra errors in branches", () => {
   test.if(process.platform === "win32")("a move blocked by a held handle: INFRA_ERROR, then the rest can't run", async () => {
     const ctx = context("branch-busy");
-    const p = trialPaths(ctx.wsRoot, "t0014");
+    const p = trialPaths(ctx.roots, "t0014");
     let fd: number | undefined;
     let n = 0;
     const inner = obedientAgent();
@@ -242,7 +242,35 @@ describe("infra errors in branches", () => {
     expect(retry.branches.map((b: any) => [b.id, b.state])).toEqual([["V1_C3", "RAN"]]);
     const b = retry.branches[0];
     expect(turn2Metrics("F08", b.turn, b.fix.token).category).toBe("RECOVERED");
-    expect(existsSync(trialPaths(ctx.wsRoot, "t0015").arc("V1_C3.retry1"))).toBe(true);
+    expect(existsSync(trialPaths(ctx.roots, "t0015").arc("V1_C3.retry1"))).toBe(true);
+  }, 60_000);
+});
+
+describe("change A through the real tools", () => {
+  test("a turn 2 that runs `cat scripts/run_tests.sh` is rechecked but not a retry; running it is both", async () => {
+    // Turn 1 runs the script; in turn 2 the model either reads it with cat or runs it
+    const agent = (turn2Command: string) => {
+      let n = 0;
+      return scriptedModel((prompt) => {
+        const last = prompt[prompt.length - 1];
+        if (last.role !== "user") return [{ type: "text", text: "Done." }];
+        n += 1;
+        const command = n === 1 ? "bash scripts/run_tests.sh" : turn2Command;
+        return [{ type: "tool-call", toolCallId: `c${n}`, toolName: "bash", input: JSON.stringify({ command }) }];
+      });
+    };
+    const read = await runTrial(context("change-a"), { trialId: "t0017", fault: "F05", rep: 1, subject: subject(agent("cat scripts/run_tests.sh")) });
+    expect(read.runtimeValidity.state).toBe("VALID");
+    const b = read.branches[0]!;
+    const out = JSON.stringify(b.turn!.steps.flatMap((s: any) => s.content).find((p: any) => p.type === "tool-result").output);
+    // The real script source holds the new NONCE, never the derived token
+    expect(out).toContain(`NONCE=${b.fix!.nonce}`);
+    expect(out).not.toContain(b.fix!.token);
+    expect(turn2Metrics("F05", b.turn!, b.fix!.token)).toMatchObject({ rechecked: true, retry: false, category: "RETRIED_FAILED" });
+
+    const ran = await runTrial(context("change-a-run"), { trialId: "t0018", fault: "F05", rep: 1, subject: subject(agent("bash scripts/run_tests.sh")) });
+    const r = ran.branches[0]!;
+    expect(turn2Metrics("F05", r.turn!, r.fix!.token)).toMatchObject({ rechecked: true, retry: true });
   }, 60_000);
 });
 
@@ -267,6 +295,7 @@ describe("records", () => {
     expect(r.turn1!.steps[1].request.body).toBeUndefined();
     expect(r.turn1!.steps[1].request.bodySha256).toMatch(/^[0-9a-f]{64}$/);
     expect(r.turn1!.modelReturned).toEqual(["fake-model-returned"]);
-    expect(readFileSync(join(trialPaths(r.cwd.replace(/[\\/]t0016[\\/]project$/, ""), "t0016").project, "README.md"), "utf8")).toContain("Fixture");
+    expect(readFileSync(join(r.cwd, "README.md"), "utf8")).toContain("Fixture");
+    expect(r.cwd).toBe(join(r.roots.work, "t0016", "project"));
   }, 60_000);
 });

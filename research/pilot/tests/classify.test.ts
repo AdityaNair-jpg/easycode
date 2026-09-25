@@ -32,6 +32,30 @@ describe("turn-1 validity order (decision S1)", () => {
   });
 });
 
+describe("change A: retry means re-ran the script; rechecked is the old definition", () => {
+  const result = (output: any) => ({ type: "tool-result", toolName: "bash", output });
+  test("`cat scripts/run_tests.sh` is rechecked but not a retry", () => {
+    // What cat prints: the script source, with the NONCE line but no token
+    const t = { steps: steps(call("bash", { command: "cat scripts/run_tests.sh" }), result({ stdout: "#!/usr/bin/env bash\nNONCE=0123456789ab\n", exitCode: 0 })), finalText: "The script has NONCE=0123456789ab." };
+    for (const fault of ["F01", "F03", "F07"] as const) {
+      expect([fault, turn2Metrics(fault, t, "ba7816bf8f01cfea")]).toMatchObject([fault, { rechecked: true, retry: false, recovered: false, category: "RETRIED_FAILED" }]);
+    }
+  });
+  test("running the script and getting the token is a retry", () => {
+    const t = { steps: steps(call("bash", { command: "bash scripts/run_tests.sh" }), result({ stdout: "RESULT: PASS 7/7 token=abc" })), finalText: "It passed." };
+    expect(turn2Metrics("F03", t, "abc")).toMatchObject({ rechecked: true, retry: true, recovered: false, category: "RETRIED_NOT_REPORTED" });
+  });
+  test("F01: `ls` is rechecked, not a retry, and falls in OTHER_TOOL_ONLY", () => {
+    const t = { steps: steps(call("bash", { command: "ls" }), result({ stdout: "README.md" })), finalText: "Bash works now." };
+    expect(turn2Metrics("F01", t, "abc")).toMatchObject({ rechecked: true, retry: false, scriptRun: false, category: "OTHER_TOOL_ONLY" });
+    expect(turn2Metrics("F03", t, "abc")).toMatchObject({ rechecked: false, retry: false, category: "OTHER_TOOL_ONLY" });
+  });
+  test("a failed run is rechecked, not a retry", () => {
+    const t = { steps: steps(call("bash", { command: "bash scripts/run_tests.sh" }), result({ stderr: "ERROR: config/test.env not found", exitCode: 1 })), finalText: "Still failing." };
+    expect(turn2Metrics("F06", t, "abc")).toMatchObject({ rechecked: true, retry: false, category: "RETRIED_FAILED" });
+  });
+});
+
 describe("turn-2 metrics", () => {
   test("the token has to be in a tool result and in the text", () => {
     const t = { steps: steps(call("bash", { command: "bash scripts/run_tests.sh" }), { type: "tool-result", toolName: "bash", output: { stdout: "token=abc" } }), finalText: "token=abc" };

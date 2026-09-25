@@ -21,6 +21,13 @@ root, in Git Bash on Windows (see `NOTEBOOK.md`, deviation D4).
 | Scoring, report, figure, renders, review sample (`rebuild.ts`) | the committed raw records | yes |
 | Model runs (`run.ts`) | API keys, network, money | **no**: provider sampling differs from call to call. The raw records are the frozen outputs; rebuild from them rather than re-running |
 
+Trial workspaces (not needed to rebuild any number) live outside the repo, at the roots recorded in
+each manifest (`settings.workRoot`, default `D:\work`, and `settings.arcRoot`, default `D:\work-arc`).
+Set `PILOT_WORK_ROOT` and `PILOT_ARC_ROOT` to use other roots.
+
+The scripts that write evidence take an evidence-folder argument (default `m1`); the re-validation
+after changes A and B used `cp1-changes`.
+
 ## Scripts
 
 | Script | Reads | Writes | Backs |

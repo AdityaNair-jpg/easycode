@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="bun test" tests="100" assertions="373" failures="0" skipped="0" time="171.9594407">
+  <testsuite name="research\pilot\tests\classify.test.ts" file="research\pilot\tests\classify.test.ts" tests="11" assertions="28" failures="0" skipped="0" time="0.007114" hostname="">
+    <testsuite name="attempted (Section 5.1)" file="research\pilot\tests\classify.test.ts" line="7" tests="2" assertions="7" failures="0" skipped="0" time="0" hostname="">
+      <testcase name="F01 and F02: any bash call" classname="attempted (Section 5.1)" time="0.000083" file="research\pilot\tests\classify.test.ts" line="11" assertions="3" />
+      <testcase name="F03-F10 and controls: a bash command containing run_tests.sh" classname="attempted (Section 5.1)" time="0.000115" file="research\pilot\tests\classify.test.ts" line="16" assertions="4" />
+    </testsuite>
+    <testsuite name="turn-1 validity order (decision S1)" file="research\pilot\tests\classify.test.ts" line="24" tests="1" assertions="5" failures="0" skipped="0" time="0" hostname="">
+      <testcase name="each state" classname="turn-1 validity order (decision S1)" time="0.00014" file="research\pilot\tests\classify.test.ts" line="26" assertions="5" />
+    </testsuite>
+    <testsuite name="change A: retry means re-ran the script; rechecked is the old definition" file="research\pilot\tests\classify.test.ts" line="35" tests="4" assertions="7" failures="0" skipped="0" time="0.001" hostname="">
+      <testcase name="`cat scripts/run_tests.sh` is rechecked but not a retry" classname="change A: retry means re-ran the script; rechecked is the old definition" time="0.000355" file="research\pilot\tests\classify.test.ts" line="37" assertions="3" />
+      <testcase name="running the script and getting the token is a retry" classname="change A: retry means re-ran the script; rechecked is the old definition" time="0.000045" file="research\pilot\tests\classify.test.ts" line="44" assertions="1" />
+      <testcase name="F01: `ls` is rechecked, not a retry, and falls in OTHER_TOOL_ONLY" classname="change A: retry means re-ran the script; rechecked is the old definition" time="0.001171" file="research\pilot\tests\classify.test.ts" line="48" assertions="2" />
+      <testcase name="a failed run is rechecked, not a retry" classname="change A: retry means re-ran the script; rechecked is the old definition" time="0.000062" file="research\pilot\tests\classify.test.ts" line="53" assertions="1" />
+    </testsuite>
+    <testsuite name="turn-2 metrics" file="research\pilot\tests\classify.test.ts" line="59" tests="2" assertions="3" failures="0" skipped="0" time="0" hostname="">
+      <testcase name="the token has to be in a tool result and in the text" classname="turn-2 metrics" time="0.00007" file="research\pilot\tests\classify.test.ts" line="60" assertions="2" />
+      <testcase name="tool errors count as results for the token search" classname="turn-2 metrics" time="0.000038" file="research\pilot\tests\classify.test.ts" line="67" assertions="1" />
+    </testsuite>
+    <testsuite name="looks_stale heuristic" file="research\pilot\tests\classify.test.ts" line="73" tests="1" assertions="4" failures="0" skipped="0" time="0" hostname="">
+      <testcase name="flags stale claims and requests to fix, not plain success" classname="looks_stale heuristic" time="0.000301" file="research\pilot\tests\classify.test.ts" line="74" assertions="4" />
+    </testsuite>
+    <testsuite name="path flags" file="research\pilot\tests\classify.test.ts" line="82" tests="1" assertions="2" failures="0" skipped="0" time="0" hostname="">
+      <testcase name="`..` and `_stash` in arguments" classname="path flags" time="0.00005" file="research\pilot\tests\classify.test.ts" line="83" assertions="2" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="research\pilot\tests\copied.test.ts" file="research\pilot\tests\copied.test.ts" tests="5" assertions="42" failures="0" skipped="0" time="0.1215804" hostname="">
+    <testsuite name="verbatim copies from chat.ts" file="research\pilot\tests\copied.test.ts" line="25" tests="3" assertions="38" failures="0" skipped="0" time="0" hostname="">
+      <testcase name="buildConversationHistory equals chat.ts lines 35-49 exactly" classname="verbatim copies from chat.ts" time="0.000117" file="research\pilot\tests\copied.test.ts" line="26" assertions="3" />
+      <testcase name="every kept line of the content builder appears in chat.ts 143-227, in order" classname="verbatim copies from chat.ts" time="0.000142" file="research\pilot\tests\copied.test.ts" line="31" assertions="33" />
+      <testcase name="the NOTE template equals chat.ts line 87" classname="verbatim copies from chat.ts" time="0.000077" file="research\pilot\tests\copied.test.ts" line="43" assertions="2" />
+    </testsuite>
+    <testsuite name="buildConversationHistory behaviour" file="research\pilot\tests\copied.test.ts" line="52" tests="1" assertions="1" failures="0" skipped="0" time="0" hostname="">
+      <testcase name="drops ERROR messages and empty assistant messages, keeps text only" classname="buildConversationHistory behaviour" time="0.000074" file="research\pilot\tests\copied.test.ts" line="53" assertions="1" />
+    </testsuite>
+    <testsuite name="A1_text equals easycode&apos;s content" file="research\pilot\tests\copied.test.ts" line="71" tests="1" assertions="3" failures="0" skipped="0" time="0.02" hostname="">
+      <testcase name="generateText steps joined with &quot;&quot; equal the streamed content chat.ts builds" classname="A1_text equals easycode&apos;s content" time="0.020797" file="research\pilot\tests\copied.test.ts" line="88" assertions="3" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="research\pilot\tests\faults.test.ts" file="research\pilot\tests\faults.test.ts" tests="5" assertions="26" failures="0" skipped="0" time="28.4670474" hostname="">
+    <testsuite name="faults" file="research\pilot\tests\faults.test.ts" line="10" tests="5" assertions="26" failures="0" skipped="0" time="28.462" hostname="">
+      <testcase name="F01&apos;s error is the string bash.ts returns, verbatim" classname="faults" time="0.00015" file="research\pilot\tests\faults.test.ts" line="11" assertions="1" />
+      <testcase name="change B layout: only project\ under the work root; stash, snapshot, archives and log under the archive root" classname="faults" time="0.000158" file="research\pilot\tests\faults.test.ts" line="16" assertions="13" />
+      <testcase name="every fault fails with its expected error, then passes with a new token after the fix" classname="faults" time="25.634083" file="research\pilot\tests\faults.test.ts" line="27" assertions="10" />
+      <testcase name="under F07 a model&apos;s own git command can&apos;t reach the easycode repo" classname="faults" time="2.828667" file="research\pilot\tests\faults.test.ts" line="36" assertions="1" />
+      <testcase name="only F01 disables bash" classname="faults" time="0.000121" file="research\pilot\tests\faults.test.ts" line="42" assertions="1" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="research\pilot\tests\fixture.test.ts" file="research\pilot\tests\fixture.test.ts" tests="5" assertions="28" failures="0" skipped="0" time="4.6493154" hostname="">
+    <testsuite name="fixture" file="research\pilot\tests\fixture.test.ts" line="18" tests="5" assertions="28" failures="0" skipped="0" time="4.647" hostname="">
+      <testcase name="tokenFor is the first 16 hex digits of SHA-256" classname="fixture" time="0.000035" file="research\pilot\tests\fixture.test.ts" line="19" assertions="1" />
+      <testcase name="no generated file contains a carriage return" classname="fixture" time="0.514413" file="research\pilot\tests\fixture.test.ts" line="24" assertions="13" />
+      <testcase name="git repo: one commit, autocrlf off, local identity, clean apart from the nonce" classname="fixture" time="1.242453" file="research\pilot\tests\fixture.test.ts" line="33" assertions="5" />
+      <testcase name="setNonce rewrites the one NONCE line and refuses two" classname="fixture" time="0.468134" file="research\pilot\tests\fixture.test.ts" line="46" assertions="3" />
+      <testcase name="a clean run passes through the real bash tool; --verbose adds 7 check lines" classname="fixture" time="2.423329" file="research\pilot\tests\fixture.test.ts" line="57" assertions="6" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="research\pilot\tests\fsutil.test.ts" file="research\pilot\tests\fsutil.test.ts" tests="6" assertions="21" failures="0" skipped="0" time="7.8753128" hostname="">
+    <testsuite name="safeMove" file="research\pilot\tests\fsutil.test.ts" line="9" tests="3" assertions="11" failures="0" skipped="0" time="6.818" hostname="">
+      <testcase name="moves, and refuses a missing source or an existing target" classname="safeMove" time="0.003026" file="research\pilot\tests\fsutil.test.ts" line="10" assertions="5" />
+      <testcase name="retries while a handle is held, then succeeds" classname="safeMove" time="0.607776" file="research\pilot\tests\fsutil.test.ts" line="23" assertions="2" />
+      <testcase name="gives up with MOVE_FAILED after 5 retries, leaving the source in place" classname="safeMove" time="6.20857" file="research\pilot\tests\fsutil.test.ts" line="34" assertions="4" />
+    </testsuite>
+    <testsuite name="safeCopy" file="research\pilot\tests\fsutil.test.ts" line="51" tests="1" assertions="3" failures="0" skipped="0" time="0.563" hostname="">
+      <testcase name="copies a tree and refuses to write over anything" classname="safeCopy" time="0.563316" file="research\pilot\tests\fsutil.test.ts" line="52" assertions="3" />
+    </testsuite>
+    <testsuite name="fingerprint" file="research\pilot\tests\fsutil.test.ts" line="63" tests="2" assertions="7" failures="0" skipped="0" time="0.489" hostname="">
+      <testcase name="changes with content, a new file, an empty folder, and the lock; ignores .git contents" classname="fingerprint" time="0.489035" file="research\pilot\tests\fsutil.test.ts" line="64" assertions="5" />
+      <testcase name="a missing project has a fixed fingerprint" classname="fingerprint" time="0.000617" file="research\pilot\tests\fsutil.test.ts" line="84" assertions="2" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="research\pilot\tests\history.test.ts" file="research\pilot\tests\history.test.ts" tests="11" assertions="26" failures="0" skipped="0" time="0.0388324" hostname="">
+    <testsuite name="system prompts" file="research\pilot\tests\history.test.ts" line="11" tests="3" assertions="12" failures="0" skipped="0" time="0.001" hostname="">
+      <testcase name="P_norule is P_full minus exactly the rule-5 line" classname="system prompts" time="0.0002" file="research\pilot\tests\history.test.ts" line="12" assertions="8" />
+      <testcase name="the rule text removed is the one on system-prompt.ts line 78" classname="system prompts" time="0.001008" file="research\pilot\tests\history.test.ts" line="27" assertions="2" />
+      <testcase name="removal refuses zero or two occurrences" classname="system prompts" time="0.000077" file="research\pilot\tests\history.test.ts" line="34" assertions="2" />
+    </testsuite>
+    <testsuite name="turn-2 messages" file="research\pilot\tests\history.test.ts" line="40" tests="7" assertions="12" failures="0" skipped="0" time="0" hostname="">
+      <testcase name="C1: P_norule, [user T1, assistant A1_text, user V]" classname="turn-2 messages" time="0.000144" file="research\pilot\tests\history.test.ts" line="51" assertions="1" />
+      <testcase name="C2: P_norule, [user T1, ...A1_msgs, user V], trace untouched" classname="turn-2 messages" time="0.000034" file="research\pilot\tests\history.test.ts" line="62" assertions="3" />
+      <testcase name="C3: C1 with V + blank line + NOTE" classname="turn-2 messages" time="0.000096" file="research\pilot\tests\history.test.ts" line="69" assertions="3" />
+      <testcase name="C4: P_full with C1&apos;s messages" classname="turn-2 messages" time="0.000023" file="research\pilot\tests\history.test.ts" line="76" assertions="1" />
+      <testcase name="C5: P_full with C3&apos;s messages" classname="turn-2 messages" time="0.000025" file="research\pilot\tests\history.test.ts" line="80" assertions="1" />
+      <testcase name="C3 and C5 refuse to run without the NOTE" classname="turn-2 messages" time="0.00003" file="research\pilot\tests\history.test.ts" line="84" assertions="1" />
+      <testcase name="turn 1 is one user message, and there are 10 branches" classname="turn-2 messages" time="0.000052" file="research\pilot\tests\history.test.ts" line="88" assertions="2" />
+    </testsuite>
+    <testsuite name="NOTE" file="research\pilot\tests\history.test.ts" line="96" tests="1" assertions="2" failures="0" skipped="0" time="0.034" hostname="">
+      <testcase name="built from the real checkShell(): Git Bash on Windows" classname="NOTE" time="0.03416" file="research\pilot\tests\history.test.ts" line="97" assertions="2" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="research\pilot\tests\precommit.test.ts" file="research\pilot\tests\precommit.test.ts" tests="5" assertions="6" failures="0" skipped="0" time="1.0669061" hostname="">
+    <testsuite name="pre-commit scan" file="research\pilot\tests\precommit.test.ts" line="17" tests="5" assertions="6" failures="0" skipped="0" time="1.062" hostname="">
+      <testcase name="passes a clean stage" classname="pre-commit scan" time="0.242902" file="research\pilot\tests\precommit.test.ts" line="18" assertions="1" />
+      <testcase name="fails a staged file holding a secret value, naming the variable only" classname="pre-commit scan" time="0.23423" file="research\pilot\tests\precommit.test.ts" line="25" assertions="2" />
+      <testcase name="finds a secret inside a gzipped file" classname="pre-commit scan" time="0.239204" file="research\pilot\tests\precommit.test.ts" line="34" assertions="1" />
+      <testcase name="fails a staged .env" classname="pre-commit scan" time="0.148932" file="research\pilot\tests\precommit.test.ts" line="41" assertions="1" />
+      <testcase name="fails a file over the size limit" classname="pre-commit scan" time="0.199945" file="research\pilot\tests\precommit.test.ts" line="48" assertions="1" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="research\pilot\tests\report.test.ts" file="research\pilot\tests\report.test.ts" tests="12" assertions="46" failures="0" skipped="0" time="0.1826512" hostname="">
+    <testsuite name="scorer on synthetic records" file="research\pilot\tests\report.test.ts" line="93" tests="5" assertions="15" failures="0" skipped="0" time="0.004" hostname="">
+      <testcase name="one effective turn-1 row per planned trial; the infra error is replaced; the missing one is reported" classname="scorer on synthetic records" time="0.000257" file="research\pilot\tests\report.test.ts" line="94" assertions="3" />
+      <testcase name="branch categories and the retried branch" classname="scorer on synthetic records" time="0.000311" file="research\pilot\tests\report.test.ts" line="106" assertions="7" />
+      <testcase name="controls, including the missing one" classname="scorer on synthetic records" time="0.000164" file="research\pilot\tests\report.test.ts" line="122" assertions="1" />
+      <testcase name="cost per row from usage and the pricing table" classname="scorer on synthetic records" time="0.000102" file="research\pilot\tests\report.test.ts" line="130" assertions="3" />
+      <testcase name="re-scoring the same raw files gives the same summary" classname="scorer on synthetic records" time="0.004085" file="research\pilot\tests\report.test.ts" line="138" assertions="1" />
+    </testsuite>
+    <testsuite name="report on synthetic records" file="research\pilot\tests\report.test.ts" line="146" tests="7" assertions="31" failures="0" skipped="0" time="0.061" hostname="">
+      <testcase name="problems section counts" classname="report on synthetic records" time="0.0001" file="research\pilot\tests\report.test.ts" line="147" assertions="4" />
+      <testcase name="accounting" classname="report on synthetic records" time="0.000049" file="research\pilot\tests\report.test.ts" line="155" assertions="3" />
+      <testcase name="primary table: rates and Wilson intervals" classname="report on synthetic records" time="0.000053" file="research\pilot\tests\report.test.ts" line="162" assertions="4" />
+      <testcase name="paired comparisons with exact McNemar p" classname="report on synthetic records" time="0.000042" file="research\pilot\tests\report.test.ts" line="175" assertions="2" />
+      <testcase name="categories, controls, thresholds, cost" classname="report on synthetic records" time="0.00012" file="research\pilot\tests\report.test.ts" line="181" assertions="8" />
+      <testcase name="figure, review sample, renders, audit" classname="report on synthetic records" time="0.000807" file="research\pilot\tests\report.test.ts" line="193" assertions="6" />
+      <testcase name="regenerating leaves the report and an existing review sample alone" classname="report on synthetic records" time="0.061735" file="research\pilot\tests\report.test.ts" line="206" assertions="4" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="research\pilot\tests\run.test.ts" file="research\pilot\tests\run.test.ts" tests="4" assertions="15" failures="0" skipped="0" time="28.7903681" hostname="">
+    <testsuite name="planning" file="research\pilot\tests\run.test.ts" line="37" tests="2" assertions="2" failures="0" skipped="0" time="0.001" hostname="">
+      <testcase name="rep by rep across faults, controls after rep 1, ids unique" classname="planning" time="0.001684" file="research\pilot\tests\run.test.ts" line="38" assertions="1" />
+      <testcase name="the brief&apos;s three models are the only ones allowed" classname="planning" time="0.000021" file="research\pilot\tests\run.test.ts" line="48" assertions="1" />
+    </testsuite>
+    <testsuite name="executeRun with a fake model" file="research\pilot\tests\run.test.ts" line="53" tests="2" assertions="13" failures="0" skipped="0" time="28.77" hostname="">
+      <testcase name="writes the manifest first, one record per planned unit, and a completion file" classname="executeRun with a fake model" time="15.111165" file="research\pilot\tests\run.test.ts" line="54" assertions="9" />
+      <testcase name="the infra-error pass re-runs a failed turn 1 under a new id, once" classname="executeRun with a fake model" time="13.659347" file="research\pilot\tests\run.test.ts" line="72" assertions="4" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="research\pilot\tests\secrets.test.ts" file="research\pilot\tests\secrets.test.ts" tests="5" assertions="13" failures="0" skipped="0" time="0.5291082" hostname="">
+    <testsuite name="parseDotenv" file="research\pilot\tests\secrets.test.ts" line="11" tests="1" assertions="1" failures="0" skipped="0" time="0" hostname="">
+      <testcase name="reads names and values, skips comments, strips matching quotes" classname="parseDotenv" time="0.000476" file="research\pilot\tests\secrets.test.ts" line="12" assertions="1" />
+    </testsuite>
+    <testsuite name="scrubEnv" file="research\pilot\tests\secrets.test.ts" line="23" tests="2" assertions="5" failures="0" skipped="0" time="0" hostname="">
+      <testcase name="matches .env names and secret-looking names case-insensitively" classname="scrubEnv" time="0.000114" file="research\pilot\tests\secrets.test.ts" line="24" assertions="2" />
+      <testcase name="isSecretName" classname="scrubEnv" time="0.00006" file="research\pilot\tests\secrets.test.ts" line="40" assertions="3" />
+    </testsuite>
+    <testsuite name="env through easycode&apos;s real bash tool" file="research\pilot\tests\secrets.test.ts" line="47" tests="2" assertions="7" failures="0" skipped="0" time="0.527" hostname="">
+      <testcase name="no secret name or value appears" classname="env through easycode&apos;s real bash tool" time="0.527694" file="research\pilot\tests\secrets.test.ts" line="48" assertions="6" />
+      <testcase name="checkShell still passes after the scrub" classname="env through easycode&apos;s real bash tool" time="0.00011" file="research\pilot\tests\secrets.test.ts" line="71" assertions="1" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="research\pilot\tests\stats.test.ts" file="research\pilot\tests\stats.test.ts" tests="14" assertions="26" failures="0" skipped="0" time="0.0026597" hostname="">
+    <testsuite name="wilson" file="research\pilot\tests\stats.test.ts" line="7" tests="5" assertions="10" failures="0" skipped="0" time="0" hostname="">
+      <testcase name="5/10: centre 0.5, half-width 1.959964 * sqrt(0.025 + 0.009604) / 1.384146 = 0.263407" classname="wilson" time="0.000044" file="research\pilot\tests\stats.test.ts" line="9" assertions="2" />
+      <testcase name="0/10: [0, 2 * 0.192073 / 1.384146] = [0, 0.277533]" classname="wilson" time="0.000027" file="research\pilot\tests\stats.test.ts" line="14" assertions="2" />
+      <testcase name="10/10 mirrors 0/10: [0.722467, 1]" classname="wilson" time="0.000018" file="research\pilot\tests\stats.test.ts" line="19" assertions="2" />
+      <testcase name="1/10: centre 0.292073 / 1.384146 = 0.211013, half 1.959964 * sqrt(0.009 + 0.009604) / 1.384146 = 0.193136" classname="wilson" time="0.000015" file="research\pilot\tests\stats.test.ts" line="24" assertions="2" />
+      <testcase name="n = 0 gives NaN, bad counts throw" classname="wilson" time="0.000041" file="research\pilot\tests\stats.test.ts" line="29" assertions="2" />
+    </testsuite>
+    <testsuite name="exact McNemar (two-sided binomial on discordant pairs)" file="research\pilot\tests\stats.test.ts" line="35" tests="7" assertions="11" failures="0" skipped="0" time="0.001" hostname="">
+      <testcase name="no discordant pairs: p = 1" classname="exact McNemar (two-sided binomial on discordant pairs)" time="0.000013" file="research\pilot\tests\stats.test.ts" line="36" assertions="1" />
+      <testcase name="5 vs 0: 2 * (1/2)^5 = 0.0625" classname="exact McNemar (two-sided binomial on discordant pairs)" time="0.000046" file="research\pilot\tests\stats.test.ts" line="37" assertions="1" />
+      <testcase name="6 vs 1: 2 * (1 + 7) / 128 = 0.125" classname="exact McNemar (two-sided binomial on discordant pairs)" time="0.000016" file="research\pilot\tests\stats.test.ts" line="38" assertions="1" />
+      <testcase name="10 vs 2: 2 * (1 + 12 + 66) / 4096 = 0.03857421875" classname="exact McNemar (two-sided binomial on discordant pairs)" time="0.000015" file="research\pilot\tests\stats.test.ts" line="39" assertions="1" />
+      <testcase name="2 vs 8: 2 * (1 + 10 + 45) / 1024 = 0.109375, symmetric" classname="exact McNemar (two-sided binomial on discordant pairs)" time="0.000021" file="research\pilot\tests\stats.test.ts" line="40" assertions="2" />
+      <testcase name="3 vs 3: capped at 1" classname="exact McNemar (two-sided binomial on discordant pairs)" time="0.000012" file="research\pilot\tests\stats.test.ts" line="44" assertions="1" />
+      <testcase name="binomCdfHalf edge cases and a large n" classname="exact McNemar (two-sided binomial on discordant pairs)" time="0.001015" file="research\pilot\tests\stats.test.ts" line="45" assertions="4" />
+    </testsuite>
+    <testsuite name="seeded sampling" file="research\pilot\tests\stats.test.ts" line="54" tests="1" assertions="4" failures="0" skipped="0" time="0" hostname="">
+      <testcase name="same seed, same sample; different seed, different order" classname="seeded sampling" time="0.000289" file="research\pilot\tests\stats.test.ts" line="55" assertions="4" />
+    </testsuite>
+    <testsuite name="csv" file="research\pilot\tests\stats.test.ts" line="65" tests="1" assertions="1" failures="0" skipped="0" time="0" hostname="">
+      <testcase name="round trip with commas, quotes, newlines, booleans and blanks" classname="csv" time="0.000085" file="research\pilot\tests\stats.test.ts" line="66" assertions="1" />
+    </testsuite>
+  </testsuite>
+  <testsuite name="research\pilot\tests\trial.test.ts" file="research\pilot\tests\trial.test.ts" tests="17" assertions="96" failures="0" skipped="0" time="99.9610867" hostname="">
+    <testsuite name="a valid trial with a well-behaved fake model" file="research\pilot\tests\trial.test.ts" line="52" tests="2" assertions="41" failures="0" skipped="0" time="21.29" hostname="">
+      <testcase name="F03: turn 1 valid, ten branches, each recovered with its own token; archives and snapshot in place" classname="a valid trial with a well-behaved fake model" time="10.674585" file="research\pilot\tests\trial.test.ts" line="53" assertions="30" />
+      <testcase name="what each condition sends: system prompt, history, NOTE" classname="a valid trial with a well-behaved fake model" time="10.616135" file="research\pilot\tests\trial.test.ts" line="82" assertions="11" />
+    </testsuite>
+    <testsuite name="turn-1 states" file="research\pilot\tests\trial.test.ts" line="105" tests="8" assertions="18" failures="0" skipped="0" time="30.309" hostname="">
+      <testcase name="INVALID_NO_ATTEMPT: text only" classname="turn-1 states" time="0.480103" file="research\pilot\tests\trial.test.ts" line="106" assertions="3" />
+      <testcase name="INVALID_MODIFIED: the model writes a file" classname="turn-1 states" time="1.728837" file="research\pilot\tests\trial.test.ts" line="116" assertions="1" />
+      <testcase name="INVALID_EMPTY: runs the script, then says nothing" classname="turn-1 states" time="0.646631" file="research\pilot\tests\trial.test.ts" line="127" assertions="1" />
+      <testcase name="INFRA_ERROR: an API error the SDK won&apos;t retry" classname="turn-1 states" time="0.478638" file="research\pilot\tests\trial.test.ts" line="136" assertions="2" />
+      <testcase name="retryable errors are retried with backoff and logged" classname="turn-1 states" time="17.465618" file="research\pilot\tests\trial.test.ts" line="143" assertions="3" />
+      <testcase name="PROVIDER_REJECTED: a 400 stops the run" classname="turn-1 states" time="0.462344" file="research\pilot\tests\trial.test.ts" line="152" assertions="4" />
+      <testcase name="TURN_TIMEOUT: a model call that never returns" classname="turn-1 states" time="2.78094" file="research\pilot\tests\trial.test.ts" line="163" assertions="1" />
+      <testcase name="TURN_TIMEOUT: a hung bash command is found and killed" classname="turn-1 states" time="6.270268" file="research\pilot\tests\trial.test.ts" line="169" assertions="3" />
+    </testsuite>
+    <testsuite name="budget guard" file="research\pilot\tests\trial.test.ts" line="183" tests="2" assertions="8" failures="0" skipped="0" time="4.192" hostname="">
+      <testcase name="stops before turn 1 when even one call would pass the budget" classname="budget guard" time="0.45835" file="research\pilot\tests\trial.test.ts" line="184" assertions="3" />
+      <testcase name="stops between branches and never passes the limit" classname="budget guard" time="3.734017" file="research\pilot\tests\trial.test.ts" line="192" assertions="5" />
+    </testsuite>
+    <testsuite name="infra errors in branches" file="research\pilot\tests\trial.test.ts" line="207" tests="2" assertions="11" failures="0" skipped="0" time="18.405" hostname="">
+      <testcase name="a move blocked by a held handle: INFRA_ERROR, then the rest can&apos;t run" classname="infra errors in branches" time="8.005908" file="research\pilot\tests\trial.test.ts" line="208" assertions="6" />
+      <testcase name="an API error in one branch; the infra pass re-runs just that branch" classname="infra errors in branches" time="10.400577" file="research\pilot\tests\trial.test.ts" line="234" assertions="5" />
+    </testsuite>
+    <testsuite name="change A through the real tools" file="research\pilot\tests\trial.test.ts" line="249" tests="1" assertions="5" failures="0" skipped="0" time="12.384" hostname="">
+      <testcase name="a turn 2 that runs `cat scripts/run_tests.sh` is rechecked but not a retry; running it is both" classname="change A through the real tools" time="12.384419" file="research\pilot\tests\trial.test.ts" line="250" assertions="5" />
+    </testsuite>
+    <testsuite name="controls" file="research\pilot\tests\trial.test.ts" line="277" tests="1" assertions="6" failures="0" skipped="0" time="2.709" hostname="">
+      <testcase name="T1 and V2 controls on a clean fixture" classname="controls" time="2.709011" file="research\pilot\tests\trial.test.ts" line="278" assertions="6" />
+    </testsuite>
+    <testsuite name="records" file="research\pilot\tests\trial.test.ts" line="290" tests="1" assertions="7" failures="0" skipped="0" time="10.652" hostname="">
+      <testcase name="a trial record survives a JSON round trip unchanged" classname="records" time="10.652144" file="research\pilot\tests\trial.test.ts" line="291" assertions="7" />
+    </testsuite>
+  </testsuite>
+</testsuites>

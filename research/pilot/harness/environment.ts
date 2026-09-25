@@ -25,7 +25,13 @@ export type Environment = ReturnType<typeof captureEnvironment>;
 export function captureEnvironment() {
   const shell = resolveShell();
   const head = capture(["git", "rev-parse", "HEAD"]).out;
-  const dirty = capture(["git", "status", "--porcelain", "--", "research/pilot"]).out;
+  // Dirty means changed tracked files, or new files in the harness or tests.
+  // New evidence and run output don't count: runs write them.
+  const dirty = capture(["git", "status", "--porcelain", "--", "research/pilot"])
+    .out.split(/\r?\n/)
+    .filter(Boolean)
+    .filter((l) => !l.startsWith("??") || /research\/pilot\/(harness|tests)\//.test(l))
+    .join("\n");
   // The product code must be byte-identical to the pinned commit
   const productDiff = capture(["git", "diff", "--quiet", PINNED_EASYCODE_COMMIT, "--", "packages", "package.json"]);
   const pinnedFull = capture(["git", "rev-parse", PINNED_EASYCODE_COMMIT]).out;

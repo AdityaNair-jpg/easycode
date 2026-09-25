@@ -1,0 +1,8 @@
+{
+  "label": "windows-path-gemini",
+  "models": [
+    "gemini-2.5-flash"
+  ],
+  "ok": false,
+  "error": "easycode's grep tool fails in this launch environment ({\"error\":\"Failed to execute command: Executable not found in $PATH: \\\"grep\\\"\"}); stop and ask the human"
+}

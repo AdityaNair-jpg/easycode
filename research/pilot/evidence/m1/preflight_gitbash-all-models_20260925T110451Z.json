@@ -1,0 +1,10 @@
+{
+  "label": "gitbash-all-models",
+  "models": [
+    "gemini-2.5-flash",
+    "claude-haiku-4-5",
+    "gpt-5.4-mini"
+  ],
+  "ok": false,
+  "error": "No API key loaded for: ANTHROPIC_API_KEY, OPENAI_API_KEY (names only; check the repo-root .env)"
+}

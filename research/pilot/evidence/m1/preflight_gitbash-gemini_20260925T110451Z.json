@@ -1,0 +1,52 @@
+{
+  "label": "gitbash-gemini",
+  "models": [
+    "gemini-2.5-flash"
+  ],
+  "ok": true,
+  "checks": {
+    "shell": {
+      "removedEnvNames": [
+        "ANTHROPIC_API_KEY",
+        "API_URL",
+        "CLAUDE_CODE_MESSAGING_TOKEN",
+        "CLERK_FRONTEND_API",
+        "CLERK_OAUTH_CLIENT_ID",
+        "CLERK_OAUTH_CLIENT_SECRET",
+        "CLERK_PUBLISHABLE_KEY",
+        "CLERK_SECRET_KEY",
+        "DATABASE_URL",
+        "GOOGLE_GENERATIVE_AI_API_KEY",
+        "JWT_SECRET",
+        "OPENAI_API_KEY"
+      ],
+      "gitCeiling": "D:\\easycode\\research\\pilot\\ws"
+    },
+    "shellCheck": {
+      "ok": true,
+      "name": "Git Bash"
+    },
+    "grepProbe": {
+      "matches": [
+        {
+          "file": "data\\fixtures.txt",
+          "line": 1,
+          "content": "alpha"
+        }
+      ]
+    },
+    "dotenvNames": [
+      "API_URL",
+      "DATABASE_URL",
+      "OPENAI_API_KEY",
+      "ANTHROPIC_API_KEY",
+      "GOOGLE_GENERATIVE_AI_API_KEY",
+      "CLERK_PUBLISHABLE_KEY",
+      "CLERK_SECRET_KEY",
+      "JWT_SECRET",
+      "CLERK_FRONTEND_API",
+      "CLERK_OAUTH_CLIENT_ID",
+      "CLERK_OAUTH_CLIENT_SECRET"
+    ]
+  }
+}

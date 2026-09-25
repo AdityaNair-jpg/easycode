@@ -37,7 +37,15 @@ Brief: `PILOT_BRIEF.md`. Branch: `research/stage1-pilot`. Pinned easycode commit
 | `bun research/pilot/harness/fake-trial.ts` | x0001 (F02), x0002 (F01): turn 1 VALID, 10/10 branches each; longest path 110 chars | `evidence/m1/fake_trials_20260925T104330Z.json`, `condition_examples_x0002_20260925T104330Z.md`, `fake_trial_x000*.json.gz` |
 | `bun test research/pilot/tests` | 95 pass, 0 fail | `evidence/m1/test_results_20260925T105746Z.txt`, `evidence/m1/test_results_20260925T110032Z.junit.xml` (95 tests, 0 failures) |
 
-The PowerShell launch used for the fresh-PATH smoke test:
+Preflight checks (`harness/preflight-check.ts`, no model calls), run after commit `837910c`:
+
+| Launch | Models | Outcome | Evidence |
+|---|---|---|---|
+| Git Bash | gemini-2.5-flash | ok | `evidence/m1/preflight_gitbash-gemini_20260925T110451Z.json` |
+| Git Bash | all three | refused: no `ANTHROPIC_API_KEY`, no `OPENAI_API_KEY` | `evidence/m1/preflight_gitbash-all-models_20260925T110451Z.json` |
+| PowerShell, plain Windows PATH | gemini-2.5-flash | refused: grep tool fails | `evidence/m1/preflight_windows-path-gemini_20260925T110452Z.json` |
+
+The PowerShell launch used for the fresh-PATH smoke test (and the last preflight row):
 `powershell.exe -NoProfile -Command '$env:Path=[Environment]::GetEnvironmentVariable("Path","Machine")+";"+[Environment]::GetEnvironmentVariable("Path","User"); Set-Location D:\easycode; & "C:\Users\Aditya\AppData\Roaming\npm\node_modules\bun\bin\bun.exe" research/pilot/harness/smoke-tools.ts windows-path-launch'`
 
 ### Anomalies

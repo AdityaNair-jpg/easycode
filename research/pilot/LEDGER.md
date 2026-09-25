@@ -44,7 +44,9 @@ study to `research/pilot/`, so the ledger lives here and indexes this folder onl
 | evidence/m1/fake_trials_20260925T104330Z.json, fake_trial_x000*.json.gz | evidence | current | two full fake-model trials, archives, longest path | 2026-09-25 | Prompt 1 |
 | evidence/m1/condition_examples_x0002_20260925T104330Z.md | evidence | current | exact system prompts and C1-C5 messages from a fake turn 1 | 2026-09-25 | Prompt 1 |
 | evidence/m1/test_results_*.txt, *.junit.xml | evidence | current | full test run | 2026-09-25 | Prompt 1 |
-| evidence/m1/synthetic_report/ | evidence | current | REPORT.md, figure, summary and review sample built from the synthetic run | 2026-09-25 | Prompt 1 |
+| evidence/m1/synthetic_report/ | evidence | current | REPORT.md (two generations), figure, summary and review sample from the synthetic run | 2026-09-25 | Prompt 1 |
+| evidence/m1/preflight_*_20260925T1104*.json | evidence | current | pre-run checks: ok for Gemini from Git Bash; refused for missing keys and for a plain Windows PATH | 2026-09-25 | Prompt 1 |
+| harness/preflight-check.ts | code | current | runs the pre-run checks and saves the outcome | 2026-09-25 | Prompt 1 |
 
 ## 2. References
 

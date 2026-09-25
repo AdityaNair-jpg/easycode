@@ -64,6 +64,14 @@ export function secretValues(entries: readonly DotenvEntry[] = readDotenv()): {
   return entries.filter((e) => e.value.length > 0 && SECRET_NAME_PATTERN.test(e.name));
 }
 
+// Last line of defence for anything stored from outside the harness (API
+// error bodies, messages): replaces any secret value with its name
+export function redact(text: string, secrets = secretValues()): string {
+  let out = text;
+  for (const s of secrets) if (s.value.length >= 4) out = out.split(s.value).join(`[REDACTED ${s.name}]`);
+  return out;
+}
+
 let scrubbed: { shell: Shell; removed: string[] } | null = null;
 
 // easycode's bash tool spawns every command with resolveShell().env, a copy of

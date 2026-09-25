@@ -1,0 +1,5 @@
+# Keep LF on checkout. The hook script breaks under sh with CRLF, and the
+# evidence files should read back byte-for-byte as they were written.
+* text=auto eol=lf
+*.gz binary
+*.png binary

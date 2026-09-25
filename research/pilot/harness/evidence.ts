@@ -7,7 +7,7 @@ export function stamp(date = new Date()): string {
   return date.toISOString().replace(/[-:]/g, "").replace(/\.\d+Z$/, "Z");
 }
 
-export function writeEvidence(milestone: string, name: string, content: string): string {
+export function writeEvidence(milestone: string, name: string, content: string | Uint8Array): string {
   const dir = join(EVIDENCE_DIR, milestone);
   mkdirSync(dir, { recursive: true });
   const path = join(dir, name);

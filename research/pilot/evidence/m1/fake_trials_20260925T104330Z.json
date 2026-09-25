@@ -1,0 +1,132 @@
+{
+  "summary": [
+    {
+      "trialId": "x0001",
+      "fault": "F02",
+      "turn1": "VALID",
+      "branches": [
+        "V1_C1:RAN",
+        "V1_C2:RAN",
+        "V1_C3:RAN",
+        "V1_C4:RAN",
+        "V1_C5:RAN",
+        "V2_C1:RAN",
+        "V2_C2:RAN",
+        "V2_C3:RAN",
+        "V2_C4:RAN",
+        "V2_C5:RAN"
+      ],
+      "archives": [
+        [
+          "research/pilot/ws/x0001/arc/V1_C1",
+          "research/pilot/ws/_stash/x0001/arc/V1_C1"
+        ],
+        [
+          "research/pilot/ws/x0001/arc/V1_C2",
+          "research/pilot/ws/_stash/x0001/arc/V1_C2"
+        ],
+        [
+          "research/pilot/ws/x0001/arc/V1_C3",
+          "research/pilot/ws/_stash/x0001/arc/V1_C3"
+        ],
+        [
+          "research/pilot/ws/x0001/arc/V1_C4",
+          "research/pilot/ws/_stash/x0001/arc/V1_C4"
+        ],
+        [
+          "research/pilot/ws/x0001/arc/V1_C5",
+          "research/pilot/ws/_stash/x0001/arc/V1_C5"
+        ],
+        [
+          "research/pilot/ws/x0001/arc/V2_C1",
+          "research/pilot/ws/_stash/x0001/arc/V2_C1"
+        ],
+        [
+          "research/pilot/ws/x0001/arc/V2_C2",
+          "research/pilot/ws/_stash/x0001/arc/V2_C2"
+        ],
+        [
+          "research/pilot/ws/x0001/arc/V2_C3",
+          "research/pilot/ws/_stash/x0001/arc/V2_C3"
+        ],
+        [
+          "research/pilot/ws/x0001/arc/V2_C4",
+          "research/pilot/ws/_stash/x0001/arc/V2_C4"
+        ],
+        [
+          "research/pilot/ws/x0001/arc/V2_C5",
+          "research/pilot/ws/_stash/x0001/arc/V2_C5"
+        ]
+      ],
+      "pathCount": 879,
+      "longestPath": "D:\\easycode\\research\\pilot\\ws\\_stash\\x0001\\live\\project\\.git\\objects\\15\\3fc21368cecd7200c22c114e23b23605012895",
+      "longestPathLength": 110,
+      "under200": true,
+      "record": "research/pilot/evidence/m1/fake_trial_x0001_F02_20260925T104330Z.json.gz"
+    },
+    {
+      "trialId": "x0002",
+      "fault": "F01",
+      "turn1": "VALID",
+      "branches": [
+        "V1_C1:RAN",
+        "V1_C2:RAN",
+        "V1_C3:RAN",
+        "V1_C4:RAN",
+        "V1_C5:RAN",
+        "V2_C1:RAN",
+        "V2_C2:RAN",
+        "V2_C3:RAN",
+        "V2_C4:RAN",
+        "V2_C5:RAN"
+      ],
+      "archives": [
+        [
+          "research/pilot/ws/x0002/arc/V1_C1",
+          "research/pilot/ws/_stash/x0002/arc/V1_C1"
+        ],
+        [
+          "research/pilot/ws/x0002/arc/V1_C2",
+          "research/pilot/ws/_stash/x0002/arc/V1_C2"
+        ],
+        [
+          "research/pilot/ws/x0002/arc/V1_C3",
+          "research/pilot/ws/_stash/x0002/arc/V1_C3"
+        ],
+        [
+          "research/pilot/ws/x0002/arc/V1_C4",
+          "research/pilot/ws/_stash/x0002/arc/V1_C4"
+        ],
+        [
+          "research/pilot/ws/x0002/arc/V1_C5",
+          "research/pilot/ws/_stash/x0002/arc/V1_C5"
+        ],
+        [
+          "research/pilot/ws/x0002/arc/V2_C1",
+          "research/pilot/ws/_stash/x0002/arc/V2_C1"
+        ],
+        [
+          "research/pilot/ws/x0002/arc/V2_C2",
+          "research/pilot/ws/_stash/x0002/arc/V2_C2"
+        ],
+        [
+          "research/pilot/ws/x0002/arc/V2_C3",
+          "research/pilot/ws/_stash/x0002/arc/V2_C3"
+        ],
+        [
+          "research/pilot/ws/x0002/arc/V2_C4",
+          "research/pilot/ws/_stash/x0002/arc/V2_C4"
+        ],
+        [
+          "research/pilot/ws/x0002/arc/V2_C5",
+          "research/pilot/ws/_stash/x0002/arc/V2_C5"
+        ]
+      ],
+      "pathCount": 879,
+      "longestPath": "D:\\easycode\\research\\pilot\\ws\\_snap\\x0002\\project\\.git\\objects\\15\\3fc21368cecd7200c22c114e23b23605012895",
+      "longestPathLength": 104,
+      "under200": true,
+      "record": "research/pilot/evidence/m1/fake_trial_x0002_F01_20260925T104330Z.json.gz"
+    }
+  ]
+}

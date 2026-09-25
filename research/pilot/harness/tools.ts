@@ -21,6 +21,12 @@ export type ToolEvent = {
 
 export type ToolSet = ReturnType<typeof createTools>;
 
+// Bash commands still running, across every trial in this process. After a
+// turn timeout this tells a trial's own hung command apart from another
+// trial's, so only the right process gets killed.
+export const pendingBash = new Map<string, { cwd: string; command: string }>();
+let pendingSeq = 0;
+
 export function instrumentedTools(
   cwd: string,
   opts: { disableBash: boolean },
@@ -49,6 +55,10 @@ export function instrumentedTools(
           simulated,
         };
         events.push(event);
+        const pendingKey = `p${pendingSeq++}`;
+        if (name === "bash" && !simulated) {
+          pendingBash.set(pendingKey, { cwd, command: String((input as any)?.command ?? "") });
+        }
         try {
           const output = await execute(input, options);
           event.output = output;
@@ -57,6 +67,7 @@ export function instrumentedTools(
           event.thrown = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
           throw err;
         } finally {
+          pendingBash.delete(pendingKey);
           event.endedAt = new Date().toISOString();
           event.durationMs = Date.now() - started;
         }

@@ -1,0 +1,6 @@
+#!/bin/sh
+# Copied to .git/hooks/pre-commit for the Stage 1 pilot. It only acts on the
+# study branch, so commits on other branches are untouched.
+branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+[ "$branch" = "research/stage1-pilot" ] || exit 0
+exec bun research/pilot/harness/precommit.ts

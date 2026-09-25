@@ -1,0 +1,320 @@
+{
+  "launch": "windows-path-launch",
+  "project": "research/pilot/ws/_m1/smoke-20260925T102755Z-windows-path-launch/project",
+  "scrubbedEnvNames": [
+    "ANTHROPIC_API_KEY",
+    "API_URL",
+    "CLAUDE_CODE_MESSAGING_TOKEN",
+    "CLERK_FRONTEND_API",
+    "CLERK_OAUTH_CLIENT_ID",
+    "CLERK_OAUTH_CLIENT_SECRET",
+    "CLERK_PUBLISHABLE_KEY",
+    "CLERK_SECRET_KEY",
+    "DATABASE_URL",
+    "GOOGLE_GENERATIVE_AI_API_KEY",
+    "JWT_SECRET",
+    "OPENAI_API_KEY"
+  ],
+  "environment": {
+    "capturedAt": "2026-09-25T10:27:57.497Z",
+    "windows": {
+      "ver": "Microsoft Windows [Version 10.0.26200.9445]",
+      "os": "Microsoft Windows 11 Home Single Language | 10.0.26200 | build 26200"
+    },
+    "platform": "win32",
+    "arch": "x64",
+    "bun": {
+      "version": "1.4.2",
+      "revision": "744846f844374847c902b5e7fd59b4342a51ef99",
+      "execPath": "C:\\Users\\Aditya\\AppData\\Roaming\\npm\\node_modules\\bun\\bin\\bun.exe"
+    },
+    "shell": {
+      "executable": "C:\\Program Files\\Git\\usr\\bin\\bash.exe",
+      "name": "Git Bash",
+      "bashVersion": "GNU bash, version 5.2.37(1)-release (x86_64-pc-msys)",
+      "gitVersionInShell": "git version 2.49.0.windows.1"
+    },
+    "gitVersionOnPath": "git version 2.49.0.windows.1",
+    "grepOnProcessPath": null,
+    "repoRoot": "D:\\easycode",
+    "code": {
+      "pinnedEasycodeCommit": "4f126f9fd3560bc354c507567110001743db24fc",
+      "headCommit": "719e702626e305bd7fb175deb00a7c1e08cf62b2",
+      "productCodeMatchesPin": true,
+      "easycodeCommitRunAgainst": "4f126f9fd3560bc354c507567110001743db24fc",
+      "harnessCommit": "719e702626e305bd7fb175deb00a7c1e08cf62b2",
+      "harnessDirty": true
+    },
+    "packages": {
+      "ai": "6.0.191",
+      "@ai-sdk/google": "2.0.74",
+      "@ai-sdk/anthropic": "3.0.79",
+      "@ai-sdk/openai": "3.0.65"
+    }
+  },
+  "allOk": false,
+  "results": [
+    {
+      "tool": "readFile",
+      "input": {
+        "path": "README.md"
+      },
+      "expect": "README content",
+      "ok": true,
+      "output": {
+        "content": "# Fixture project\nRun the tests with `bash scripts/run_tests.sh`.\n"
+      }
+    },
+    {
+      "tool": "listDirectory",
+      "input": {
+        "path": "."
+      },
+      "expect": "the five top-level entries",
+      "ok": true,
+      "output": {
+        "path": ".",
+        "entries": [
+          {
+            "name": "bin",
+            "type": "directory"
+          },
+          {
+            "name": "config",
+            "type": "directory"
+          },
+          {
+            "name": "data",
+            "type": "directory"
+          },
+          {
+            "name": "lib",
+            "type": "directory"
+          },
+          {
+            "name": "scripts",
+            "type": "directory"
+          },
+          {
+            "name": "README.md",
+            "type": "file"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "glob",
+      "input": {
+        "pattern": "**/*.sh"
+      },
+      "expect": "both .sh files",
+      "ok": true,
+      "output": {
+        "files": [
+          "lib\\assert.sh",
+          "scripts\\run_tests.sh"
+        ]
+      }
+    },
+    {
+      "tool": "grep",
+      "input": {
+        "pattern": "^alpha$",
+        "path": "data"
+      },
+      "expect": "one match in data/fixtures.txt",
+      "ok": false,
+      "output": {
+        "error": "Failed to execute command: Executable not found in $PATH: \"grep\""
+      }
+    },
+    {
+      "tool": "writeFile",
+      "input": {
+        "path": "smoke/written.txt",
+        "content": "one\n"
+      },
+      "expect": "success",
+      "ok": true,
+      "output": {
+        "success": true,
+        "path": "smoke\\written.txt",
+        "bytesWritten": 4
+      }
+    },
+    {
+      "tool": "editFile",
+      "input": {
+        "path": "smoke/written.txt",
+        "oldString": "one",
+        "newString": "two"
+      },
+      "expect": "success",
+      "ok": true,
+      "output": {
+        "success": true,
+        "path": "smoke\\written.txt"
+      }
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "bash scripts/run_tests.sh"
+      },
+      "expect": "exit 0 and the PASS line with the fixture's token",
+      "ok": true,
+      "output": {
+        "stdout": "RESULT: PASS 7/7 token=b4585eb8b505b618\n",
+        "stderr": "",
+        "exitCode": 0
+      }
+    }
+  ],
+  "events": [
+    {
+      "seq": 0,
+      "toolName": "readFile",
+      "toolCallId": "smoke-readFile",
+      "input": {
+        "path": "README.md"
+      },
+      "startedAt": "2026-09-25T10:27:56.111Z",
+      "simulated": false,
+      "output": {
+        "content": "# Fixture project\nRun the tests with `bash scripts/run_tests.sh`.\n"
+      },
+      "endedAt": "2026-09-25T10:27:56.114Z",
+      "durationMs": 3
+    },
+    {
+      "seq": 1,
+      "toolName": "listDirectory",
+      "toolCallId": "smoke-listDirectory",
+      "input": {
+        "path": "."
+      },
+      "startedAt": "2026-09-25T10:27:56.116Z",
+      "simulated": false,
+      "output": {
+        "path": ".",
+        "entries": [
+          {
+            "name": "bin",
+            "type": "directory"
+          },
+          {
+            "name": "config",
+            "type": "directory"
+          },
+          {
+            "name": "data",
+            "type": "directory"
+          },
+          {
+            "name": "lib",
+            "type": "directory"
+          },
+          {
+            "name": "scripts",
+            "type": "directory"
+          },
+          {
+            "name": "README.md",
+            "type": "file"
+          }
+        ]
+      },
+      "endedAt": "2026-09-25T10:27:56.118Z",
+      "durationMs": 2
+    },
+    {
+      "seq": 2,
+      "toolName": "glob",
+      "toolCallId": "smoke-glob",
+      "input": {
+        "pattern": "**/*.sh",
+        "path": "."
+      },
+      "startedAt": "2026-09-25T10:27:56.118Z",
+      "simulated": false,
+      "output": {
+        "files": [
+          "lib\\assert.sh",
+          "scripts\\run_tests.sh"
+        ]
+      },
+      "endedAt": "2026-09-25T10:27:56.119Z",
+      "durationMs": 1
+    },
+    {
+      "seq": 3,
+      "toolName": "grep",
+      "toolCallId": "smoke-grep",
+      "input": {
+        "pattern": "^alpha$",
+        "path": "data"
+      },
+      "startedAt": "2026-09-25T10:27:56.119Z",
+      "simulated": false,
+      "output": {
+        "error": "Failed to execute command: Executable not found in $PATH: \"grep\""
+      },
+      "endedAt": "2026-09-25T10:27:56.134Z",
+      "durationMs": 15
+    },
+    {
+      "seq": 4,
+      "toolName": "writeFile",
+      "toolCallId": "smoke-writeFile",
+      "input": {
+        "path": "smoke/written.txt",
+        "content": "one\n"
+      },
+      "startedAt": "2026-09-25T10:27:56.134Z",
+      "simulated": false,
+      "output": {
+        "success": true,
+        "path": "smoke\\written.txt",
+        "bytesWritten": 4
+      },
+      "endedAt": "2026-09-25T10:27:56.135Z",
+      "durationMs": 1
+    },
+    {
+      "seq": 5,
+      "toolName": "editFile",
+      "toolCallId": "smoke-editFile",
+      "input": {
+        "path": "smoke/written.txt",
+        "oldString": "one",
+        "newString": "two"
+      },
+      "startedAt": "2026-09-25T10:27:56.136Z",
+      "simulated": false,
+      "output": {
+        "success": true,
+        "path": "smoke\\written.txt"
+      },
+      "endedAt": "2026-09-25T10:27:56.136Z",
+      "durationMs": 0
+    },
+    {
+      "seq": 6,
+      "toolName": "bash",
+      "toolCallId": "smoke-bash",
+      "input": {
+        "command": "bash scripts/run_tests.sh",
+        "timeout": 30000
+      },
+      "startedAt": "2026-09-25T10:27:56.137Z",
+      "simulated": false,
+      "output": {
+        "stdout": "RESULT: PASS 7/7 token=b4585eb8b505b618\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "endedAt": "2026-09-25T10:27:57.239Z",
+      "durationMs": 1102
+    }
+  ]
+}
